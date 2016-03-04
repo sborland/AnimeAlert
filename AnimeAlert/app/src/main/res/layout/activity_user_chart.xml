@@ -16,7 +16,8 @@
         android:text="Return to Options"
         android:id="@+id/OptButton"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:tag="return"/>
 
     <ListView
         android:layout_width="wrap_content"

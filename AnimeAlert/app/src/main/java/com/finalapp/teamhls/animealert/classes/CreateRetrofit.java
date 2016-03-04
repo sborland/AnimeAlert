@@ -1,4 +1,4 @@
-package com.finalapp.teamhls.animealert;
+package com.finalapp.teamhls.animealert.classes;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
