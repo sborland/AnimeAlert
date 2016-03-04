@@ -44,21 +44,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //creates the retrofit and acesses it using the url
+        String url = "http://www.senpai.moe/";
+        CreateRetrofit retro = new CreateRetrofit();
+        Retrofit retrofit = retro.accessService(url);
 
-
-
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        // set your desired log level
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient httpClient = new OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://www.senpai.moe/")
-                .addConverterFactory(GsonConverterFactory.create())	//parse Gson string
-                .client(httpClient)	//add logging
-                .build();
 
         AnimeService service = retrofit.create(AnimeService.class);
         title ="Sushi Police";
@@ -96,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
     public interface AnimeService {
         @GET("/export.php?type=json&src=episodes/")
         Call<Hummingbird> getAnimeData();
-
     }
 
 }

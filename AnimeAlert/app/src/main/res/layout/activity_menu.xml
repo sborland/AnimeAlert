@@ -9,4 +9,21 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.finalapp.teamhls.animealert.MenuActivity">
 
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:text="View Your Anime Alerts"
+        android:id="@+id/UserChartButton"
+        android:layout_above="@+id/CurrentChartButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:text="View Current Upcoming Anime"
+        android:id="@+id/CurrentChartButton"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

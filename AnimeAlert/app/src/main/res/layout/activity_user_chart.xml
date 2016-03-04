@@ -9,4 +9,36 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.finalapp.teamhls.animealert.UserChartActivity">
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Return to Options"
+        android:id="@+id/OptButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/CurrentChartList"
+        android:longClickable="true"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/OptButton"
+        android:layout_below="@+id/TitleUC" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Your Anime Alerts"
+        android:id="@+id/TitleUC"
+        android:textStyle="bold"
+        android:nestedScrollingEnabled="false"
+        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:linksClickable="false" />
+
 </RelativeLayout>
