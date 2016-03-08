@@ -7,6 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:gravity="center"
     tools:context="com.finalapp.teamhls.animealert.MenuActivity">
 
     <Button
@@ -22,7 +23,7 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="100dp"
-        android:text="View Current Upcoming Anime"
+        android:text="View Current / Upcoming Anime"
         android:id="@+id/CurrentChartButton"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
