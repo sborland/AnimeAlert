@@ -7,11 +7,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AnimeDB {
     private DBHelper dbHelper;
+    public static String LOG_TAG = "My Log Tag";
 
     public AnimeDB(Context context) {
         dbHelper = new DBHelper(context);
@@ -70,9 +73,8 @@ public class AnimeDB {
                 AnimeChart.KEY_airDate + "," +
                 AnimeChart.KEY_simulCast + "," +
                 AnimeChart.KEY_isShort + "," +
-                AnimeChart.KEY_currEp + "," +
+                AnimeChart.KEY_currEp +
                 " FROM " + AnimeChart.TABLE;
-
         ArrayList<HashMap<String, String>> animeList = new ArrayList<HashMap<String, String>>();
 
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -91,9 +93,11 @@ public class AnimeDB {
 
             } while (cursor.moveToNext());
         }
+        Log.i(LOG_TAG,animeList.size()+"");
 
         cursor.close();
         db.close();
+
         return animeList;
 
     }
@@ -120,7 +124,7 @@ public class AnimeDB {
             do {
                 chart.title =cursor.getString(cursor.getColumnIndex(AnimeChart.KEY_title));
                 chart.malNum =cursor.getInt(cursor.getColumnIndex(AnimeChart.KEY_malNum));
-                chart.airDate  =cursor.getInt(cursor.getColumnIndex(AnimeChart.KEY_airDate));
+                chart.airDate  =cursor.getLong(cursor.getColumnIndex(AnimeChart.KEY_airDate));
                 chart.simulCast =cursor.getString(cursor.getColumnIndex(AnimeChart.KEY_simulCast));
                 chart.isShort  =cursor.getString(cursor.getColumnIndex(AnimeChart.KEY_isShort));
                 chart.currEp =cursor.getInt(cursor.getColumnIndex(AnimeChart.KEY_currEp));

@@ -17,10 +17,34 @@ public class AnimeChart {
         // property help us to keep data
         public int malNum;
         public String title;
-        public int airDate;
+        public Long airDate;
         public String simulCast;
         public String isShort;
         public int currEp;
+
+        public void setMalNum(int malNum) {
+                this.malNum = malNum;
+        }
+        public void setTitle(String title) {
+                this.title = title;
+        }
+        public void setAirDate(Long airDate) {
+                this.airDate = airDate;
+        }
+        public void setSimulCast(String simulCast) {
+                this.simulCast = simulCast;
+        }
+        public void setIsShort(String isShort) {
+                this.isShort = isShort;
+        }
+        public void setCurrEp(int currEp) {
+                this.currEp = currEp;
+        }
+
+
+
+
+
 
 
 }

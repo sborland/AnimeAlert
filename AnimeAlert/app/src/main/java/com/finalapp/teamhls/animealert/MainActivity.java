@@ -21,7 +21,9 @@ import com.finalapp.teamhls.animealert.response.Item;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String userDB;
     File currentDB;
     Button enterButton;
+    AnimeDB currentChart;
     List<AnimeShow> BList = new ArrayList<AnimeShow>();
 
     @Override
@@ -46,14 +49,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         enterButton.setOnClickListener(this);
 
         currentDB =getApplicationContext().getDatabasePath("currentChart.db");
+        Log.i(LOG_TAG, currentDB.getAbsolutePath());
+        Log.i(LOG_TAG,(currentDB.exists())+"");
         if(!currentDB.exists()){
-            AnimeDB currentChart = new AnimeDB(this);
-            AnimeChart anime = new AnimeChart();
+            currentChart = new AnimeDB(this);
             Log.i(LOG_TAG, "CREATED DATABASE");
-            Log.i(LOG_TAG, currentDB.getAbsolutePath());
-        }else{
+        }else {
             Log.i(LOG_TAG, "FOUND DATABASE");
-
+            currentChart = new AnimeDB(this);
+            ArrayList<HashMap<String, String>> animelist = currentChart.getAnimeChart();
+            for (HashMap<String,String> x : animelist){
+               for (Map.Entry entry : x.entrySet()){
+                   Log.i(LOG_TAG,entry.getKey() +" "+ entry.getValue());
+               }
+            }
+            Log.i(LOG_TAG, "TEST: " + currentChart.getAnimeByMalNum(31414).title);
         }
 
         //creates the retrofit and acesses it using the url
@@ -86,9 +96,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         String ShowName = y.getName().replace(" (Premiere)","");
                         // Log.i(LOG_TAG, "Before: "+ ShowName);
                         for(Item z: response.body().getItems()) {
-                            if (z.getName().equals(ShowName)){
-                              //ADD TO DATABASE
-                              //Log.i(LOG_TAG, "Got: "+ ShowName +" MAL: "+ z.getMALID());
+                            if (z.getName().equals(ShowName)) {
+                                //ADD TO DATABASE
+                                AnimeChart anime = new AnimeChart();
+                                anime.setTitle(ShowName);
+                                anime.setAirDate(Long.valueOf(z.getAirdateU()));
+                                anime.setIsShort(y.getShort().toString());
+                                anime.setSimulCast(z.getSimulcast());
+                                anime.setCurrEp(y.getCtr());
+                                anime.setMalNum(Integer.parseInt(z.getMALID()));
+                                currentChart.insert(anime);
+                                //Log.i(LOG_TAG, "Got: " + ShowName + " MAL: " + z.getMALID());
+
                             }
                          }
                      }
