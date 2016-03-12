@@ -25,22 +25,23 @@ public class DBUser  extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //All necessary tables you like to create will create here
 
-        String CREATE_TABLE_ANIMECHART = "CREATE TABLE " + AnimeChart.TABLE  + "("
-                + AnimeChart.KEY_malNum  + " INTEGER ,"
-                + AnimeChart.KEY_title + " TEXT, "
-                + AnimeChart.KEY_airDate + " INTEGER, "
-                + AnimeChart.KEY_simulCast + " TEXT, "
-                + AnimeChart.KEY_isShort + " TEXT, "
-                + AnimeChart.KEY_currEp + " INTEGER )";
+        String CREATE_TABLE_USERCHART = "CREATE TABLE " + UserChart.TABLE  + "("
+                + UserChart.KEY_malNum  + " INTEGER ,"
+                + UserChart.KEY_title + " TEXT, "
+                + UserChart.KEY_airDate + " INTEGER, "
+                + UserChart.KEY_simulCast + " TEXT, "
+                + UserChart.KEY_isShort + " TEXT, "
+                + UserChart.KEY_userTime + "INTEGER"
+                + UserChart.KEY_currEp + " INTEGER )";
 
-        db.execSQL(CREATE_TABLE_ANIMECHART);
+        db.execSQL(CREATE_TABLE_USERCHART);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed, all data will be gone!!!
-        db.execSQL("DROP TABLE IF EXISTS " + AnimeChart.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + UserChart.TABLE);
 
         // Create tables again
         onCreate(db);
