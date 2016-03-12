@@ -14,10 +14,10 @@ public class DBHelper  extends SQLiteOpenHelper {
     //version number.
 
     //database name
-    //private static final String DATABASE_NAME = "";
+    private static final String DATABASE_NAME = "currentChart.db";
     private static final int DATABASE_VERSION = 1;
 
-    public DBHelper(Context context, String DATABASE_NAME ) {
+    public DBHelper(Context context ) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

@@ -13,8 +13,8 @@ import java.util.HashMap;
 public class AnimeDB {
     private DBHelper dbHelper;
 
-    public AnimeDB(Context context, String DATABASE_NAME) {
-        dbHelper = new DBHelper(context, DATABASE_NAME);
+    public AnimeDB(Context context) {
+        dbHelper = new DBHelper(context);
     }
 
     public void insert(AnimeChart chart) {

@@ -29,7 +29,7 @@ public class Item {
     private String simulcast;
     @SerializedName("simulcast_delay")
     @Expose
-    private Integer simulcastDelay;
+    private String simulcastDelay;
     @SerializedName("origseasonkey")
     @Expose
     private String origseasonkey;
@@ -228,7 +228,7 @@ public class Item {
      * @return
      *     The simulcastDelay
      */
-    public Integer getSimulcastDelay() {
+    public String getSimulcastDelay() {
         return simulcastDelay;
     }
 
@@ -237,8 +237,9 @@ public class Item {
      * @param simulcastDelay
      *     The simulcast_delay
      */
-    public void setSimulcastDelay(Integer simulcastDelay) {
+    public void setSimulcastDelay(String simulcastDelay) {
         this.simulcastDelay = simulcastDelay;
+
     }
 
     /**

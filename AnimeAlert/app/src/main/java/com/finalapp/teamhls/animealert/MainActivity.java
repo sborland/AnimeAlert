@@ -2,8 +2,10 @@ package com.finalapp.teamhls.animealert;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -13,8 +15,11 @@ import android.widget.Button;
 import com.finalapp.teamhls.animealert.classes.AnimeChart;
 import com.finalapp.teamhls.animealert.classes.AnimeDB;
 import com.finalapp.teamhls.animealert.classes.CreateRetrofit;
+import com.finalapp.teamhls.animealert.response.AnimeRaw;
 import com.finalapp.teamhls.animealert.response.AnimeShow;
+import com.finalapp.teamhls.animealert.response.Item;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +32,10 @@ import retrofit2.http.GET;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static String LOG_TAG = "My Log Tag";
+    private String userDB;
+    File currentDB;
     Button enterButton;
+    List<AnimeShow> BList = new ArrayList<AnimeShow>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,22 +45,70 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         enterButton = (Button) findViewById(R.id.EnterButton);
         enterButton.setOnClickListener(this);
 
+        currentDB =getApplicationContext().getDatabasePath("currentChart.db");
+        if(!currentDB.exists()){
+            AnimeDB currentChart = new AnimeDB(this);
+            AnimeChart anime = new AnimeChart();
+            Log.i(LOG_TAG, "CREATED DATABASE");
+            Log.i(LOG_TAG, currentDB.getAbsolutePath());
+        }else{
+            Log.i(LOG_TAG, "FOUND DATABASE");
+
+        }
 
         //creates the retrofit and acesses it using the url
         String url = "http://www.senpai.moe/";
         CreateRetrofit retro = new CreateRetrofit();
         Retrofit retrofit = retro.accessService(url);
-        AnimeDB currentChart = new AnimeDB(this, "currentChart.db");
-        AnimeChart anime = new AnimeChart();
         GetBasicChart(retrofit);
+        GetRawChart(retrofit);
+
+    }
+
+    public void GetRawChart(Retrofit retrofit){
+        AnimeRawService service = retrofit.create(AnimeRawService.class);
+        Call<AnimeRaw> AnimeSearch= service.getAnimeRawData();
+
+        AnimeSearch.enqueue(new Callback<AnimeRaw>() {
+            @Override
+            public void onResponse(Response<AnimeRaw> response) {
+                int httpCheck = response.code();
+                //500 is server error while 200 is a-okay
+                Log.i(LOG_TAG, "Code is: " + response.code());
+                if (httpCheck != 200) {
+                    //Display server error screen
+                    Log.i(LOG_TAG, "SERVER ERROR RAWDATA");
+
+                } else {
+                    //check if the result is 'error' or 'ok'
+                    Log.i(LOG_TAG, "SERVER GOOD RAWDATA. Result: " +response.body());
+                    for (AnimeShow y: BList) {
+                        String ShowName = y.getName().replace(" (Premiere)","");
+                        // Log.i(LOG_TAG, "Before: "+ ShowName);
+                        for(Item z: response.body().getItems()) {
+                            if (z.getName().equals(ShowName)){
+                              //ADD TO DATABASE
+                              //Log.i(LOG_TAG, "Got: "+ ShowName +" MAL: "+ z.getMALID());
+                            }
+                         }
+                     }
+                  }
+            }
+            @Override
+            public void onFailure(Throwable t) {
+                // Log error here since request failed
+                Log.i(LOG_TAG, "onFailure: " + t);
+            }
+        });
+
+
 
     }
 
     ///call this method if you want to test getting the server info
     public void GetBasicChart(Retrofit retrofit){
-            AnimeService service = retrofit.create(AnimeService.class);
-            Call<List<AnimeShow>> AnimeSearch= service.getAnimeData();
-
+            AnimeBasicService service = retrofit.create(AnimeBasicService.class);
+            Call<List<AnimeShow>> AnimeSearch= service.getAnimeBasicData();
 
             //Call retrofit asynchronously
             AnimeSearch.enqueue(new Callback<List<AnimeShow>>() {
@@ -63,48 +119,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.i(LOG_TAG, "Code is: " + response.code());
                     if (httpCheck != 200) {
                         //Display server error screen
-                        Log.i(LOG_TAG, "SERVER ERROR");
+                        Log.i(LOG_TAG, "SERVER ERROR BASICDATA");
 
                     } else {
                         //check if the result is 'error' or 'ok'
-                        Log.i(LOG_TAG, "SERVER GOOD. Result: "+ response.body());
+                        Log.i(LOG_TAG, "SERVER GOOD BASICDATA. Result: "+ response.body());
                         //Gets the current date and the dates for next two months
                         Long CurrentDate = System.currentTimeMillis()/1000;
                         Long MonthDate = CurrentDate+(604800*8);
                         //Grabs all airing anime between now and next two months
-                        List<AnimeShow> myList = new ArrayList<AnimeShow>();
                         for(AnimeShow x: response.body()) {
                             if (x.getUtime() >= CurrentDate && MonthDate>= x.getUtime()) {
-                                if (!myList.contains(x)) {
-                                    myList.add(x);
+                                if (!BList.contains(x)) {
+                                    BList.add(x);
                                 } else {
                                     //only updates if there is a more current episode
-                                    AnimeShow old = (myList.get(myList.indexOf(x)));
+                                    AnimeShow old = (BList.get(BList.indexOf(x)));
                                     if (x.getCtr() > old.getCtr()) {
                                         old.setCtr(x.getCtr());
                                     }
                                 }
                             }
                         }
-                        /////////////////Need to create function that puts myList into database yaaa
-
                         /* DEBUG
                          String ts = CurrentDate.toString();
                         for(AnimeShow y:myList){
-                            Log.i(LOG_TAG, "title: " + y.getName() +"episode: "+ y.getCtr());
-
-                        }
+                            Log.i(LOG_TAG, "title: " + y.getName() +"episode: "+ y.getCtr()); }
                         Log.i(LOG_TAG,ts+ " List size: "+myList.size());
                         */
                     }
                 }
-
                 @Override
                 public void onFailure(Throwable t) {
                     // Log error here since request failed
                     Log.i(LOG_TAG, "onFailure: " + t);
                 }
             });
+
+
     }
 
 
@@ -121,9 +173,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public interface AnimeService {
+    public interface AnimeBasicService {
         @GET("/export.php?type=json&src=episodes")
-        Call<List<AnimeShow>> getAnimeData();
+        Call<List<AnimeShow>> getAnimeBasicData();
+    }
+
+    public interface AnimeRawService {
+        @GET("/export.php?type=json&src=raw")
+        Call<AnimeRaw> getAnimeRawData();
     }
 
 }
