@@ -1,5 +1,6 @@
 package com.finalapp.teamhls.animealert.classes;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.*;
@@ -26,6 +27,7 @@ public class DownloadCover {
             final String newUrl = webSiteURL.concat(mal_id);
 
        //Thread to grab the needed data
+
         Runnable run = new  Runnable() {
             @Override
             public void run() {
@@ -61,5 +63,6 @@ public class DownloadCover {
         return new String[] {finImage,finSummary};
 
     }
+    
 
 }

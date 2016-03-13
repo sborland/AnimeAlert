@@ -25,30 +25,37 @@ public class AnimeListView extends ArrayAdapter<String> {
     public static String LOG_TAG = "My Log Tag";
 
     private final Activity context;
-
+    private final String[] malID;
     private final String[] title;
     private final String[] summary;
     private final String[] imgurl;
     // private final Integer[] imageId;
     public AnimeListView(Activity context,
-                      String[] title, String[] summary, String[] imgurl){//,Integer[] imageId) {
+                      String[] title, String[] summary, String[] imgurl, String[] malID){//,Integer[] imageId) {
         super(context, R.layout.list_single, summary);
         this.context = context;
         this.title = title;
         this.summary= summary;
         this.imgurl = imgurl;
+        this.malID = malID;
     }
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView= inflater.inflate(R.layout.list_single, null, true);
+        rowView.setId(Integer.parseInt(malID[position]));
         TextView txtSummary = (TextView) rowView.findViewById(R.id.txt);
         TextView txtTitle = (TextView) rowView.findViewById(R.id.txtname);
         new DownloadImageTask ((ImageView) rowView.findViewById(R.id.img)).execute(imgurl[position]);
 
 
-        txtTitle.setText(title[position]);
-        txtSummary.setText(summary[position]);
+        if (title[position]!="") {
+            txtTitle.setText(title[position]);
+        }
+        if (summary[position]!=""){
+            txtSummary.setText(summary[position]);
+        }
+
    return rowView;
     }
 
@@ -67,7 +74,7 @@ public class AnimeListView extends ArrayAdapter<String> {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "Error!");
+                Log.e(LOG_TAG, "Error! Image cannot be reached");
                 e.printStackTrace();
             }
 
