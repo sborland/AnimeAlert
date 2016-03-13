@@ -15,6 +15,7 @@ import android.widget.Button;
 import com.finalapp.teamhls.animealert.classes.AnimeChart;
 import com.finalapp.teamhls.animealert.classes.AnimeDB;
 import com.finalapp.teamhls.animealert.classes.CreateRetrofit;
+import com.finalapp.teamhls.animealert.classes.DBHelper;
 import com.finalapp.teamhls.animealert.response.AnimeRaw;
 import com.finalapp.teamhls.animealert.response.AnimeShow;
 import com.finalapp.teamhls.animealert.response.Item;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button enterButton;
     AnimeDB currentChart;
     List<AnimeShow> BList = new ArrayList<AnimeShow>();
-
+    boolean updateDB = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,15 +57,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.i(LOG_TAG, "CREATED DATABASE");
         }else {
             Log.i(LOG_TAG, "FOUND DATABASE");
+            updateDB = true;
             currentChart = new AnimeDB(this);
-            ArrayList<HashMap<String, String>> animelist = currentChart.getAnimeChart();
-            for (HashMap<String,String> x : animelist){
-               for (Map.Entry entry : x.entrySet()){
-                   Log.i(LOG_TAG,entry.getKey() +" "+ entry.getValue());
-               }
-            }
-            Log.i(LOG_TAG, "TEST: " + currentChart.getAnimeByMalNum(31414).title);
         }
+
+        Log.i(LOG_TAG, "TEST: " + currentChart.getAnimeByMalNum(31414).title);
 
         //creates the retrofit and acesses it using the url
         String url = "http://www.senpai.moe/";
@@ -72,7 +69,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Retrofit retrofit = retro.accessService(url);
         GetBasicChart(retrofit);
         GetRawChart(retrofit);
+        //ArrayList<HashMap<String, String>> animelist = currentChart.getAnimeChart();
+        /*
+       for (HashMap<String,String> x : animelist){
+           for (Map.Entry entry : x.entrySet()){
+              Log.i(LOG_TAG,entry.getKey() +" "+ entry.getValue());
+           }
+       }*/
 
+        //Log.i(LOG_TAG, "size of database: " + animelist.size());
     }
 
     public void GetRawChart(Retrofit retrofit){
@@ -105,12 +110,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 anime.setSimulCast(z.getSimulcast());
                                 anime.setCurrEp(y.getCtr());
                                 anime.setMalNum(Integer.parseInt(z.getMALID()));
-                                currentChart.insert(anime);
+                                if(updateDB) {
+                                    currentChart.update(anime);
+                                }else {
+                                    currentChart.insert(anime);
+                                }
                                 //Log.i(LOG_TAG, "Got: " + ShowName + " MAL: " + z.getMALID());
 
                             }
                          }
                      }
+                    ArrayList<HashMap<String, String>> animelist = currentChart.getAnimeChart();
+                    Log.i(LOG_TAG, "size of database: " + animelist.size());
                   }
             }
             @Override

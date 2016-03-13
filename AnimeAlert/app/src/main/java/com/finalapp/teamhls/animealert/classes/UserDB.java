@@ -128,8 +128,8 @@ public class UserDB {
                 UserChart.KEY_airDate + "," +
                 UserChart.KEY_simulCast + "," +
                 UserChart.KEY_isShort + "," +
-                UserChart.KEY_userTime+ "," +
-                UserChart.KEY_currEp +
+                UserChart.KEY_currEp + "," +
+                UserChart.KEY_userTime +
                 " FROM " + UserChart.TABLE
                 + " WHERE " +
                 UserChart.KEY_malNum + "=?";// It's a good practice to use parameter ?, instead of concatenate string
@@ -146,8 +146,8 @@ public class UserDB {
                 chart.airDate  =cursor.getLong(cursor.getColumnIndex(UserChart.KEY_airDate));
                 chart.simulCast =cursor.getString(cursor.getColumnIndex(UserChart.KEY_simulCast));
                 chart.isShort  =cursor.getString(cursor.getColumnIndex(UserChart.KEY_isShort));
-                chart.userTime =cursor.getLong(cursor.getColumnIndex(UserChart.KEY_userTime));
                 chart.currEp =cursor.getInt(cursor.getColumnIndex(UserChart.KEY_currEp));
+                chart.userTime =cursor.getLong(cursor.getColumnIndex(UserChart.KEY_userTime));
 
             } while (cursor.moveToNext());
         }

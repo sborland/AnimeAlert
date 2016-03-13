@@ -93,7 +93,7 @@ public class AnimeDB {
 
             } while (cursor.moveToNext());
         }
-        Log.i(LOG_TAG,animeList.size()+"");
+        //Log.i(LOG_TAG,animeList.size()+"");
 
         cursor.close();
         db.close();
