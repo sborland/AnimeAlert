@@ -9,11 +9,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="#ab005b"
-            android:layout_column="1"
             android:text="Title Not Found"
             android:textStyle="bold"
             android:typeface="serif"
-            android:textSize="20dp"
+            android:textSize="14dp"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/img"
             android:layout_toEndOf="@+id/img" />
@@ -25,7 +24,6 @@
             android:id="@+id/img"
             android:layout_width="120dp"
             android:layout_height="150dp"
-            android:layout_column="0"
             android:src="@drawable/logosmall"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
@@ -36,17 +34,17 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="#636363"
-            android:layout_column="1"
             android:textIsSelectable="false"
             android:typeface="sans"
             android:text="Description Not Found"
             android:ellipsize="end"
-            android:maxLines="9"
+            android:maxLines="7"
             android:textSize="14dp"
             android:textStyle="normal"
             android:layout_below="@+id/txtname"
             android:layout_toRightOf="@+id/img"
-            android:layout_toEndOf="@+id/img" />
+            android:layout_toEndOf="@+id/img"
+            android:layout_alignBottom="@+id/img" />
 
 
 

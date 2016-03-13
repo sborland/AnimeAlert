@@ -42,7 +42,7 @@ public class AnimeListView extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View rowView= inflater.inflate(R.layout.list_single, null, true);
+        View rowView = inflater.inflate(R.layout.list_single, null, true);
         rowView.setId(Integer.parseInt(malID[position]));
         TextView txtSummary = (TextView) rowView.findViewById(R.id.txt);
         TextView txtTitle = (TextView) rowView.findViewById(R.id.txtname);
@@ -56,7 +56,7 @@ public class AnimeListView extends ArrayAdapter<String> {
             txtSummary.setText(summary[position]);
         }
 
-   return rowView;
+        return rowView;
     }
 
 
