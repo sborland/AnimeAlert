@@ -21,21 +21,31 @@ package com.finalapp.teamhls.animealert;
         import android.widget.ImageView;
         import android.widget.ProgressBar;
         import android.widget.Spinner;
+        import android.widget.Toast;
 
+
+        import com.finalapp.teamhls.animealert.classes.AnimeChart;
+        import com.finalapp.teamhls.animealert.classes.AnimeDB;
+        import com.finalapp.teamhls.animealert.classes.UserChart;
+        import com.finalapp.teamhls.animealert.classes.UserDB;
 
         import java.util.ArrayList;
         import java.util.Calendar;
+        import java.util.HashMap;
         import java.util.LinkedHashMap;
+        import java.util.Map;
 
 public class ViewAnimeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     public static String LOG_TAG = "My Log Tag";
-
+    private int mal_num = 0;
     ArrayList<String> timeList;
     public LinkedHashMap<String, String> times = new LinkedHashMap<String, String>();
-
+    UserDB udb = new UserDB(this);
+    AnimeDB adb = new AnimeDB(this);
     CheckBox notify_check_box;
     Spinner sp;
     ImageView LoadingImg;
+    boolean added_anime = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +58,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
         //grab the malNum from previous chart
         Bundle b = getIntent().getExtras();
         String malNum = b.getString("malNum");
+        mal_num = Integer.parseInt(malNum);
         String url = "http://myanimelist.net/anime/" + malNum;
 
         notify_check_box = (CheckBox) findViewById(R.id.checkBox);
@@ -118,7 +129,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             sp.setClickable(false);
             sp.setSelection(6);
         }
-
+        enableEventAdding();
         // Setting listener for selection calls
         sp.setOnItemSelectedListener(this);
     }
@@ -134,7 +145,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
 
 
     public void onCheck(View view) {
-        if (notify_check_box.isChecked()) {
+        if (notify_check_box.isChecked() && !added_anime) {
             sp.setEnabled(true);
             sp.setClickable(true);
             ContentResolver cr = getContentResolver();
@@ -194,7 +205,6 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             Log.i(LOG_TAG, eventUri.toString());
 
             long eventID = Long.parseLong(eventUri.getLastPathSegment());
-
             ContentValues reminderValues = new ContentValues();
             reminderValues.put("event_id", eventID);
             // Default value of the system. Minutes is a integer
@@ -203,25 +213,20 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             reminderValues.put("method", 1);
             cr.insert(CalendarContract.Reminders.CONTENT_URI, reminderValues); //Uri reminderUri =
 
-          /*  ContentResolver cr = getContentResolver();
-            ContentValues values = new ContentValues();
-            values.put(Reminders.MINUTES, 15);
-            values.put(Reminders.EVENT_ID, eventID);
-            values.put(Reminders.METHOD, Reminders.METHOD_ALERT);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            Uri uri = cr.insert(Reminders.CONTENT_URI, values);*/
-
-            //startActivity(intent);
-
+            //create a UserChart with eventID as userTime and update
+            UserChart x = new UserChart();
+            AnimeChart y = adb.getAnimeByMalNum(mal_num);
+            x.setIsShort(y.isShort);
+            x.setSimulCast(y.simulCast);
+            x.setMalNum(y.malNum);
+            x.setTitle(y.title);
+            x.setAirDate(y.airDate);
+            x.setCurrEp(y.currEp);
+            x.setUserTime(eventID);
+            udb.insert(x);
+            added_anime = true;
+            Toast.makeText(this, "added event & anime to udb!",
+                    Toast.LENGTH_LONG).show();
 
 
         } else {
@@ -231,6 +236,19 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
     }
 
 
+
+    private void enableEventAdding() {
+        ArrayList<HashMap<String, String>> animeList = udb.getUserChart();
+        for (HashMap<String,String> x : animeList){
+           for (Map.Entry entry : x.entrySet()){
+               //Log.i(LOG_TAG,entry.getKey() +" "+ entry.getValue());
+               if(entry.getValue().equals(mal_num)) {
+                   Log.i(LOG_TAG, "malnum is: " + entry.getValue() + "mal_num is: " + mal_num);
+                   added_anime = true;
+               }
+           }
+        }
+    }
 
     @Override
     public void onClick(View view) {
