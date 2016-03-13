@@ -40,6 +40,8 @@
             android:gravity="center"
             android:typeface="sans"
             android:text="Description Not Found"
+            android:ellipsize="end"
+            android:maxLines="9"
             android:textSize="14dp"
             android:textStyle="normal" />
 
