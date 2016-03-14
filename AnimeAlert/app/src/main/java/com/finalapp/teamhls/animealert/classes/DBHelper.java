@@ -31,7 +31,9 @@ public class DBHelper  extends SQLiteOpenHelper {
                 + AnimeChart.KEY_airDate + " INTEGER, "
                 + AnimeChart.KEY_simulCast + " TEXT, "
                 + AnimeChart.KEY_isShort + " TEXT, "
-                + AnimeChart.KEY_currEp + " INTEGER )";
+                + AnimeChart.KEY_currEp + " INTEGER, "
+                + AnimeChart.KEY_sum + " TEXT, "
+                + AnimeChart.KEY_img+ " TEXT )";
 
         db.execSQL(CREATE_TABLE_ANIMECHART);
 
