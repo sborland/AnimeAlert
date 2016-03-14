@@ -23,7 +23,7 @@ public class DownloadCover {
     static String finSummary;
 
     public static String[] getCover(int id) {
-            String mal_id = Integer.toString(id);
+            final String mal_id = Integer.toString(id);
             final String newUrl = webSiteURL.concat(mal_id);
 
        //Thread to grab the needed data
@@ -42,12 +42,15 @@ public class DownloadCover {
                     finSummary= sum.attr("content");
 
                     //grabs anime's title image
-                    String picUrl = url.attr("href")+"/pics";
+                   String picUrl = url.attr("href")+"/pics";
                     Document ndoc = Jsoup.connect(picUrl).get();
                     Elements im = ndoc.select("meta[property=og:image]");
-                    finImage = im.attr("content");
+                    //finImage = null;
+
+                    finImage = im.attr("content").toString();
+                    //Log.i(LOG_TAG,"finImage "+ finImage);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "Unable to grab image url");
+                    Log.e(LOG_TAG, "Unable to grab image url of "+mal_id);
 
                 }
             }
