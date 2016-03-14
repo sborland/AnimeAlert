@@ -173,7 +173,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             ContentValues event = new ContentValues();
             event.put("calendar_id", 1);
             event.put("title", anime.title);
-            event.put("description", "Episode: " + anime.currEp);
+            event.put("description", "New Episode!");
             //if there is no simulcast for the anime
             if(anime.simulCast.equals("false")) {
                 anime.simulCast = "None";
@@ -204,7 +204,9 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             long startTime = start.getTimeInMillis();
             long endTime = end.getTimeInMillis();
             event.put("dtstart", startTime);
-            event.put("dtend", endTime);
+            //event.put("dtend", endTime);
+            event.put("duration", "PT0H30M0S");
+            event.put("rrule", "FREQ=WEEKLY;COUNT=12");
             event.put("eventStatus", 1);
             event.put("hasAlarm", 0);
 

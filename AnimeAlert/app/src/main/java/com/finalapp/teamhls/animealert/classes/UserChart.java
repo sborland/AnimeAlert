@@ -31,6 +31,7 @@ public class UserChart {
     public String img;
     public int notification;
 
+
     public void setMalNum(int malNum) {
         this.malNum = malNum;
     }
