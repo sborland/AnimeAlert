@@ -26,15 +26,16 @@ public class DBUser  extends SQLiteOpenHelper {
         //All necessary tables you like to create will create here
 
         String CREATE_TABLE_USERCHART = "CREATE TABLE " + UserChart.TABLE  + "("
-                + UserChart.KEY_malNum  + " INTEGER ,"
+                + UserChart.KEY_malNum  + " INTEGER, "
                 + UserChart.KEY_title + " TEXT, "
                 + UserChart.KEY_airDate + " INTEGER, "
                 + UserChart.KEY_simulCast + " TEXT, "
                 + UserChart.KEY_isShort + " TEXT, "
                 + UserChart.KEY_currEp + " INTEGER, "
                 + UserChart.KEY_userTime + " INTEGER, "
-                + AnimeChart.KEY_sum +" TEXT, "
-                + AnimeChart.KEY_img+" TEXT )";
+                + UserChart.KEY_sum + " TEXT, "
+                + UserChart.KEY_notification + " INTEGER, "
+                + UserChart.KEY_img + " TEXT )";
 
         db.execSQL(CREATE_TABLE_USERCHART);
 

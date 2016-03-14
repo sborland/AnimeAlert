@@ -2,6 +2,7 @@ package com.finalapp.teamhls.animealert;
 
         import android.Manifest;
         import android.content.ContentResolver;
+        import android.content.ContentUris;
         import android.content.ContentValues;
         import android.content.pm.PackageManager;
         import android.graphics.Bitmap;
@@ -68,7 +69,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
         String malNum = b.getString("malNum");
         mal_num = Integer.parseInt(malNum);
         String url = "http://myanimelist.net/anime/" + malNum;
-        Log.i(LOG_TAG,url);
+        Log.i(LOG_TAG, url);
 
         notify_check_box = (CheckBox) findViewById(R.id.checkBox);
         LoadingImg = (ImageView) findViewById(R.id.loadingImg);
@@ -79,17 +80,19 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
         //loads up webview
         WebView webView = (WebView) findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 LoadingImg.setVisibility(view.VISIBLE);
                 super.onPageStarted(view, url, favicon);
             }
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 LoadingImg.setVisibility(View.GONE);
                 super.onPageFinished(view, url);
             }
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
@@ -127,35 +130,18 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, timeList);
         sp.setAdapter(myAdapter);
 
-        /*if (notify_check_box.isChecked()) {
-            sp.setEnabled(false);
-            sp.setClickable(false);
-            //sp.setSelection(6);
-        }else {
-            sp.setEnabled(true);
-            sp.setClickable(true);
-        }*/
-
         if(enableEventAdding()) {
             notify_check_box.setChecked(true);
             sp.setEnabled(false);
             sp.setClickable(false);
-            //sp.setSelection(selection);
+            UserChart anime = udb.getAnimeByMalNum(mal_num);
+            sp.setSelection(anime.notification);
         }else {
             notify_check_box.setChecked(false);
             sp.setEnabled(true);
             sp.setClickable(true);
         }
-            /*
-            sp.setEnabled(false);
-            sp.setClickable(false);
-            sp.setSelection(6);
-            remove_anime = true;
-        }else {
-            notify_check_box.setChecked(false);
-            //sp.setEnabled(true);
-            //sp.setClickable(true);
-        }*/
+
         // Setting listener for selection calls
         sp.setOnItemSelectedListener(this);
     }
@@ -242,7 +228,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             reminderValues.put("event_id", eventID);
             reminderValues.put("minutes", time_selection);
             reminderValues.put("method", 1);
-            cr.insert(CalendarContract.Reminders.CONTENT_URI, reminderValues); //Uri reminderUri =
+            cr.insert(CalendarContract.Reminders.CONTENT_URI, reminderValues);
 
             //create a UserChart with eventID as userTime and insert into udb
             UserChart x = new UserChart();
@@ -251,7 +237,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             x.setSimulCast(y.simulCast);
             x.setMalNum(y.malNum);
             x.setTitle(y.title);
-            //x.setNotification(selection);
+            x.setNotification(selection);
             x.setAirDate(y.airDate);
             x.setCurrEp(y.currEp);
             x.setUserTime(eventID);
@@ -266,29 +252,16 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             sp.setEnabled(true);
             sp.setClickable(true);
             //otherwise if anime is in udb, delete it- !enableEventAdding() && !notify_check_box.isChecked()
+            UserChart anime = udb.getAnimeByMalNum(mal_num);
+            int userTime = anime.userTime.intValue();
+            DeleteCalendarEntry(userTime);
             udb.delete(mal_num);
             Log.i(LOG_TAG, "deleted" + mal_num + "from udb");
             Toast.makeText(this, "Deleted from your list!" ,
                     Toast.LENGTH_LONG).show();
             //Log.i(LOG_TAG, "unchecked: need to remove from db");
         }
-        /*if (notify_check_box.isChecked() && !added_anime) {
-            sp.setEnabled(false);
-            sp.setClickable(false);
 
-
-        } else {
-            //if it is checked
-            sp.setEnabled(false);
-            sp.setClickable(false);
-            //we can remove anime
-            if(remove_anime) {
-
-                sp.setEnabled(true);
-                sp.setClickable(true);
-                //delete reminder
-            }
-        }*/
     }
 
 
@@ -305,12 +278,21 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
                //Log.i(LOG_TAG,"key: " + key + "val: " + val);
                if(key.equals("malNum") && Integer.parseInt(val) == mal_num ) {
                    //Log.i(LOG_TAG, "malnum is: " + entry.getValue() + "mal_num is: " + mal_num);
-                   //added_anime = true;
                    return true;
                }
            }
         }
         return false;
+    }
+
+    private int DeleteCalendarEntry(int entryID) {
+        int iNumRowsDeleted = 0;
+        Uri EVENTS_URI = Uri.parse("content://com.android.calendar/" + "events");
+        Uri eventUri = ContentUris.withAppendedId(EVENTS_URI, entryID);
+        iNumRowsDeleted = getContentResolver().delete(eventUri, null, null);
+        Log.i(LOG_TAG, "Deleted " + iNumRowsDeleted + " calendar entry.");
+
+        return iNumRowsDeleted;
     }
 
     @Override

@@ -47,6 +47,7 @@ public class UserDB {
         values.put(UserChart.KEY_userTime, chart.userTime);
         values.put(UserChart.KEY_currEp, chart.currEp);
         values.put(UserChart.KEY_sum, chart.sum);
+        values.put(UserChart.KEY_notification, chart.notification);
         values.put(UserChart.KEY_img, chart.img);
 
 
@@ -76,6 +77,7 @@ public class UserDB {
         values.put(UserChart.KEY_userTime, chart.userTime);
         values.put(UserChart.KEY_currEp, chart.currEp);
         values.put(UserChart.KEY_sum, chart.sum);
+        values.put(UserChart.KEY_notification, chart.notification);
         values.put(UserChart.KEY_img, chart.img);
 
 
@@ -97,6 +99,7 @@ public class UserDB {
                 UserChart.KEY_userTime + "," +
                 UserChart.KEY_currEp + ","+
                 UserChart.KEY_sum + ","+
+                UserChart.KEY_notification + ","+
                 UserChart.KEY_img+
                 " FROM " + UserChart.TABLE;
         ArrayList<HashMap<String, String>> userList = new ArrayList<HashMap<String, String>>();
@@ -115,6 +118,7 @@ public class UserDB {
                 anime.put("isShort", cursor.getString(cursor.getColumnIndex(UserChart.KEY_isShort)));
                 anime.put("currEp", cursor.getString(cursor.getColumnIndex(UserChart.KEY_currEp)));
                 anime.put("sum", cursor.getString(cursor.getColumnIndex(UserChart.KEY_sum)));
+                anime.put("notification", cursor.getString(cursor.getColumnIndex(UserChart.KEY_notification)));
                 anime.put("img", cursor.getString(cursor.getColumnIndex(UserChart.KEY_img)));
                 userList.add(anime);
 
@@ -140,6 +144,7 @@ public class UserDB {
                 UserChart.KEY_currEp + "," +
                 UserChart.KEY_userTime + ","+
                 UserChart.KEY_sum + ","+
+                UserChart.KEY_notification + ","+
                 UserChart.KEY_img+
                 " FROM " + UserChart.TABLE
                 + " WHERE " +
@@ -160,6 +165,7 @@ public class UserDB {
                 chart.currEp =cursor.getInt(cursor.getColumnIndex(UserChart.KEY_currEp));
                 chart.userTime =cursor.getLong(cursor.getColumnIndex(UserChart.KEY_userTime));
                 chart.sum=cursor.getString(cursor.getColumnIndex(UserChart.KEY_sum));
+                chart.notification=cursor.getInt(cursor.getColumnIndex(UserChart.KEY_notification));
                 chart.img=cursor.getString(cursor.getColumnIndex(UserChart.KEY_img));
 
             } while (cursor.moveToNext());

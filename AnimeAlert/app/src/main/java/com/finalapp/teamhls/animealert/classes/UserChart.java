@@ -16,6 +16,7 @@ public class UserChart {
     public static final String KEY_userTime = "userTime";
     public static final String KEY_sum = "sum";
     public static final String KEY_img = "img";
+    public static final String KEY_notification = "notification";
 
 
     // property help us to keep data
@@ -28,6 +29,7 @@ public class UserChart {
     public Long userTime;
     public String sum;
     public String img;
+    public int notification;
 
     public void setMalNum(int malNum) {
         this.malNum = malNum;
@@ -52,7 +54,7 @@ public class UserChart {
     }
     public void setSum(String sum) {this.sum = sum;}
     public void setImg(String img) {this.img = img;}
-
+    public void setNotification(int n) {this.notification = n;}
 
 
 }

@@ -26,14 +26,14 @@ public class DBHelper  extends SQLiteOpenHelper {
         //All necessary tables you like to create will create here
 
         String CREATE_TABLE_ANIMECHART = "CREATE TABLE " + AnimeChart.TABLE  + "("
-                + AnimeChart.KEY_malNum  + " INTEGER ,"
+                + AnimeChart.KEY_malNum  + " INTEGER, "
                 + AnimeChart.KEY_title + " TEXT, "
                 + AnimeChart.KEY_airDate + " INTEGER, "
                 + AnimeChart.KEY_simulCast + " TEXT, "
                 + AnimeChart.KEY_isShort + " TEXT, "
                 + AnimeChart.KEY_currEp + " INTEGER, "
                 + AnimeChart.KEY_sum + " TEXT, "
-                + AnimeChart.KEY_img+ " TEXT )";
+                + AnimeChart.KEY_img + " TEXT )";
 
         db.execSQL(CREATE_TABLE_ANIMECHART);
 
