@@ -125,7 +125,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
 
         // Extract color list as keySet from colors hashmap
         timeList =  new ArrayList<String>(times.keySet());
-        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, timeList);
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, timeList);
         sp.setAdapter(myAdapter);
 
         if (notify_check_box.isChecked()) {

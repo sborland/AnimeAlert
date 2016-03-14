@@ -20,13 +20,23 @@ import java.util.Map;
 public class UserChartActivity extends AppCompatActivity implements View.OnClickListener {
     public static String LOG_TAG = "My Log Tag";
     UserDB udb = new UserDB(this);
+    ListView chartList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_chart);
         Log.i(LOG_TAG, "In UserCharts");
+        createList();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        createList();
+    }
 
-        ListView chartList = (ListView) findViewById(R.id.CurrentChartList);
+    public void createList(){
+        chartList = (ListView) findViewById(R.id.CurrentChartList);
 
 
         //Temporary
@@ -38,10 +48,10 @@ public class UserChartActivity extends AppCompatActivity implements View.OnClick
         ArrayList<HashMap<String, String>> animelist = udb.getUserChart();
         for (HashMap<String,String> x : animelist){
             for (Map.Entry entry : x.entrySet()){
-               if(entry.getKey().toString().equals("malNum")) {
-                   Log.i(LOG_TAG, "malNum: " + entry.getKey());
-                   malNum_list.add(entry.getValue().toString());
-               }
+                if(entry.getKey().toString().equals("malNum")) {
+                    Log.i(LOG_TAG, "malNum: " + entry.getKey());
+                    malNum_list.add(entry.getValue().toString());
+                }
             }
         }
 
@@ -66,15 +76,8 @@ public class UserChartActivity extends AppCompatActivity implements View.OnClick
                 UserChartActivity.this.startActivity(testAnime);
             }
         });
-
-
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        onCreate(null);
-        //getListAdapter().notifyDataSetChanged()
-    }
+
 
     @Override
     public void onClick(View view) {
