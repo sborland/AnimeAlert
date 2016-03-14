@@ -47,12 +47,13 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
     public LinkedHashMap<String, String> times = new LinkedHashMap<String, String>();
     UserDB udb = new UserDB(this);
     AnimeDB adb = new AnimeDB(this);
+    String title = "";
     CheckBox notify_check_box;
     Spinner sp;
     ImageView LoadingImg;
-    boolean added_anime = false;
-    boolean remove_anime = false;
     int time_selection = 0;
+    int selection = 0;
+    UserChart current;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,23 +126,38 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
 
         // Extract color list as keySet from colors hashmap
         timeList =  new ArrayList<String>(times.keySet());
-        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, timeList);
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, timeList);
         sp.setAdapter(myAdapter);
 
-        if (notify_check_box.isChecked()) {
+        /*if (notify_check_box.isChecked()) {
             sp.setEnabled(false);
             sp.setClickable(false);
-            sp.setSelection(6);
-        }
+            //sp.setSelection(6);
+        }else {
+            sp.setEnabled(true);
+            sp.setClickable(true);
+        }*/
+
         if(enableEventAdding()) {
             notify_check_box.setChecked(true);
+            sp.setEnabled(false);
+            sp.setClickable(false);
+            //sp.setSelection(selection);
+        }else {
+            notify_check_box.setChecked(false);
+            sp.setEnabled(true);
+            sp.setClickable(true);
+        }
+            /*
             sp.setEnabled(false);
             sp.setClickable(false);
             sp.setSelection(6);
             remove_anime = true;
         }else {
             notify_check_box.setChecked(false);
-        }
+            //sp.setEnabled(true);
+            //sp.setClickable(true);
+        }*/
         // Setting listener for selection calls
         sp.setOnItemSelectedListener(this);
     }
@@ -149,37 +165,38 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         //if(!notify_check_box.isChecked())
         //    notify_check_box.setChecked(true);
-
         time_selection = offset[pos];
+        selection = pos;
         Log.i(LOG_TAG, "offset: " + time_selection);
 
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
 
     public void onCheck(View view) {
-        if (notify_check_box.isChecked() && !added_anime) {
+        //if anime is not in udb
+        if(!enableEventAdding() & notify_check_box.isChecked()) {
+            //disable selection
             sp.setEnabled(false);
             sp.setClickable(false);
+            //create event with reminder and add it to udb
             ContentResolver cr = getContentResolver();
             AnimeChart anime = adb.getAnimeByMalNum(mal_num);
-            Log.i(LOG_TAG, "malnum" + mal_num);
-            //Intent intent = new Intent(Intent.ACTION_INSERT);
-            //intent.setData(CalendarContract.Events.CONTENT_URI);
+            //Log.i(LOG_TAG, "malnum" + mal_num);
             String eventUriStr = "content://com.android.calendar/events";
-            //intent.setType("vnd.android.cursor.item/event");
             ContentValues event = new ContentValues();
             event.put("calendar_id", 1);
             event.put("title", anime.title);
             event.put("description", "Episode: " + anime.currEp);
+            //if there is no simulcast for the anime
             if(anime.simulCast.equals("false")) {
                 anime.simulCast = "None";
             }
             event.put("eventLocation", anime.simulCast);
             event.put("eventTimezone", "UTC/GMT -8:00");
+            //converting the airdate from epoch time to PST
             Date date = new Date(anime.airDate * 1000);
             Log.i(LOG_TAG, "epoch time: " + anime.airDate);
             SimpleDateFormat sdf = new SimpleDateFormat("dd", Locale.US);
@@ -193,26 +210,21 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             int hour = Integer.parseInt(sdf.format(date));
             sdf = new SimpleDateFormat("mm", Locale.US);
             int min = Integer.parseInt(sdf.format(date));
+            //Log.i(LOG_TAG, "date: " + month + "/" + day + "/"+ year +" - " + hour + ":" + min);
 
-            Log.i(LOG_TAG, "date: " + month + "/" + day + "/"+ year +" - " + hour + ":" + min);
-            // For next 1hr
+            //setting start and end date of event
             Calendar start = Calendar.getInstance();
             start.set(year, month-1, day, hour, min, 0);
-
             Calendar end = Calendar.getInstance();
             end.set(year, month-1, day, hour, min+30, 0);
-
             long startTime = start.getTimeInMillis();
             long endTime = end.getTimeInMillis();
-
-
             event.put("dtstart", startTime);
             event.put("dtend", endTime);
-            //If it is bithday alarm or such kind (which should remind me for whole day) 0 for false, 1 for true
-            // values.put("allDay", 1);
             event.put("eventStatus", 1);
             event.put("hasAlarm", 0);
 
+            //permission check for writing to calendar
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
@@ -224,32 +236,47 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
                 return;
             }
             Uri eventUri = cr.insert(CalendarContract.Events.CONTENT_URI, event);
-            Log.i(LOG_TAG, eventUri.toString());
+            //Log.i(LOG_TAG, eventUri.toString());
 
             long eventID = Long.parseLong(eventUri.getLastPathSegment());
+            //create reminder
             ContentValues reminderValues = new ContentValues();
             reminderValues.put("event_id", eventID);
-            // Default value of the system. Minutes is a integer
             reminderValues.put("minutes", time_selection);
-            // Alert Methods: Default(0), Alert(1), Email(2), SMS(3)
             reminderValues.put("method", 1);
             cr.insert(CalendarContract.Reminders.CONTENT_URI, reminderValues); //Uri reminderUri =
 
-            //create a UserChart with eventID as userTime and update
+            //create a UserChart with eventID as userTime and insert into udb
             UserChart x = new UserChart();
             AnimeChart y = adb.getAnimeByMalNum(mal_num);
             x.setIsShort(y.isShort);
             x.setSimulCast(y.simulCast);
             x.setMalNum(y.malNum);
             x.setTitle(y.title);
+            //x.setNotification(selection);
             x.setAirDate(y.airDate);
             x.setCurrEp(y.currEp);
             x.setUserTime(eventID);
             udb.insert(x);
-            added_anime = true;
+
             Log.i(LOG_TAG, "size of udb: " + udb.getUserChart().size());
-            Toast.makeText(this, "added event & anime to udb!",
+            Toast.makeText(this, "Added to your list!" ,
                     Toast.LENGTH_LONG).show();
+
+            //Log.i(LOG_TAG, "checked: need to add to db");
+        }else {
+            sp.setEnabled(true);
+            sp.setClickable(true);
+            //otherwise if anime is in udb, delete it- !enableEventAdding() && !notify_check_box.isChecked()
+            udb.delete(mal_num);
+            Log.i(LOG_TAG, "deleted" + mal_num + "from udb");
+            Toast.makeText(this, "Deleted from your list!" ,
+                    Toast.LENGTH_LONG).show();
+            //Log.i(LOG_TAG, "unchecked: need to remove from db");
+        }
+        /*if (notify_check_box.isChecked() && !added_anime) {
+            sp.setEnabled(false);
+            sp.setClickable(false);
 
 
         } else {
@@ -258,15 +285,17 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             sp.setClickable(false);
             //we can remove anime
             if(remove_anime) {
-                udb.delete(mal_num);
-                Log.i(LOG_TAG, "deleted" + mal_num + "from udb");
+
+                sp.setEnabled(true);
+                sp.setClickable(true);
                 //delete reminder
             }
-        }
+        }*/
     }
 
 
 
+    //check if anime is in udb to enable event adding
     private boolean enableEventAdding() {
         //Log.i(LOG_TAG, "finding " + mal_num);
         ArrayList<HashMap<String, String>> animeList = udb.getUserChart();
@@ -278,7 +307,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
                //Log.i(LOG_TAG,"key: " + key + "val: " + val);
                if(key.equals("malNum") && Integer.parseInt(val) == mal_num ) {
                    //Log.i(LOG_TAG, "malnum is: " + entry.getValue() + "mal_num is: " + mal_num);
-                   added_anime = true;
+                   //added_anime = true;
                    return true;
                }
            }
