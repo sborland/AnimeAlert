@@ -1,51 +1,51 @@
 package com.finalapp.teamhls.animealert;
 
-        import android.Manifest;
-        import android.content.ContentResolver;
-        import android.content.ContentUris;
-        import android.content.ContentValues;
-        import android.content.pm.PackageManager;
-        import android.graphics.Bitmap;
-        import android.net.Uri;
-        import android.provider.CalendarContract;
-        import android.support.v4.app.ActivityCompat;
-        import android.support.v4.content.ContextCompat;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.util.Log;
-        import android.view.View;
-        import android.webkit.WebView;
-        import android.webkit.WebViewClient;
-        import android.widget.AdapterView;
-        import android.widget.ArrayAdapter;
-        import android.widget.Button;
-        import android.widget.CheckBox;
-        import android.widget.ImageView;
-        import android.widget.ProgressBar;
-        import android.widget.Spinner;
-        import android.widget.Toast;
+import android.Manifest;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.CalendarContract;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 
-        import com.finalapp.teamhls.animealert.classes.AnimeChart;
-        import com.finalapp.teamhls.animealert.classes.AnimeDB;
-        import com.finalapp.teamhls.animealert.classes.UserChart;
-        import com.finalapp.teamhls.animealert.classes.UserDB;
+import com.finalapp.teamhls.animealert.classes.AnimeChart;
+import com.finalapp.teamhls.animealert.classes.AnimeDB;
+import com.finalapp.teamhls.animealert.classes.UserChart;
+import com.finalapp.teamhls.animealert.classes.UserDB;
 
-        import java.text.SimpleDateFormat;
-        import java.util.ArrayList;
-        import java.util.Calendar;
-        import java.util.Date;
-        import java.util.HashMap;
-        import java.util.LinkedHashMap;
-        import java.util.Locale;
-        import java.util.Map;
-        import java.util.TimeZone;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
 
 public class ViewAnimeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     public static String LOG_TAG = "My Log Tag";
     private int mal_num = 0;
     ArrayList<String> timeList;
-    int[] offset = new int[]{0,5,10,20,30,45,60,120,180,240,300,360};
+    int[] offset = new int[]{0, 5, 10, 20, 30, 45, 60, 120, 180, 240, 300, 360};
     public LinkedHashMap<String, String> times = new LinkedHashMap<String, String>();
     UserDB udb = new UserDB(this);
     AnimeDB adb = new AnimeDB(this);
@@ -56,13 +56,12 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
     int time_selection = 0;
     int selection = 0;
     UserChart current;
-    private static final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR=1;
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_anime);
-
 
 
         Log.i(LOG_TAG, "In ViewAnime");
@@ -107,7 +106,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
         setTimes();
     }
 
-    public void setTimes(){
+    public void setTimes() {
         times.put("On airing", "0");
         times.put("5 Minutes before", "5");
         times.put("10 Minutes before", "10");
@@ -124,22 +123,22 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
 
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
         sp = (Spinner) findViewById(R.id.spinner);
 
         // Extract color list as keySet from colors hashmap
-        timeList =  new ArrayList<String>(times.keySet());
+        timeList = new ArrayList<String>(times.keySet());
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, timeList);
         sp.setAdapter(myAdapter);
 
-        if(enableEventAdding()) {
+        if (enableEventAdding()) {
             notify_check_box.setChecked(true);
             sp.setEnabled(false);
             sp.setClickable(false);
             UserChart anime = udb.getAnimeByMalNum(mal_num);
             sp.setSelection(anime.notification);
-        }else {
+        } else {
             notify_check_box.setChecked(false);
             sp.setEnabled(true);
             sp.setClickable(true);
@@ -164,7 +163,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
 
     public void onCheck(View view) {
         //if anime is not in udb
-        if(!enableEventAdding() & notify_check_box.isChecked()) {
+        if (!enableEventAdding() & notify_check_box.isChecked()) {
             //disable selection
             sp.setEnabled(false);
             sp.setClickable(false);
@@ -178,7 +177,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             event.put("title", anime.title);
             event.put("description", "New Episode!");
             //if there is no simulcast for the anime
-            if(anime.simulCast.equals("false")) {
+            if (anime.simulCast.equals("false")) {
                 anime.simulCast = "None";
             }
             event.put("eventLocation", anime.simulCast);
@@ -201,9 +200,9 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
 
             //setting start and end date of event
             Calendar start = Calendar.getInstance();
-            start.set(year, month-1, day, hour, min, 0);
+            start.set(year, month - 1, day, hour, min, 0);
             Calendar end = Calendar.getInstance();
-            end.set(year, month-1, day, hour, min+30, 0);
+            end.set(year, month - 1, day, hour, min + 30, 0);
             long startTime = start.getTimeInMillis();
             long endTime = end.getTimeInMillis();
             event.put("dtstart", startTime);
@@ -215,7 +214,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
 
             //permission check for writing to calendar
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-               requestPermission();
+                requestPermission();
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
                 //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -249,11 +248,11 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             udb.insert(x);
 
             Log.i(LOG_TAG, "size of udb: " + udb.getUserChart().size());
-            Toast.makeText(this, "Anime was added to your Anime Alert list! Check your calender!" ,
+            Toast.makeText(this, "Anime was added to your Anime Alert list! Check your calender!",
                     Toast.LENGTH_LONG).show();
 
             //Log.i(LOG_TAG, "checked: need to add to db");
-        }else {
+        } else {
             sp.setEnabled(true);
             sp.setClickable(true);
             //otherwise if anime is in udb, delete it- !enableEventAdding() && !notify_check_box.isChecked()
@@ -262,7 +261,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             DeleteCalendarEntry(userTime);
             udb.delete(mal_num);
             Log.i(LOG_TAG, "deleted" + mal_num + "from udb");
-            Toast.makeText(this, "Anime was removed for your Anime Alert list!" ,
+            Toast.makeText(this, "Anime was removed from your Anime Alert list!",
                     Toast.LENGTH_LONG).show();
             //Log.i(LOG_TAG, "unchecked: need to remove from db");
         }
@@ -270,22 +269,21 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
     }
 
 
-
     //check if anime is in udb to enable event adding
     private boolean enableEventAdding() {
         //Log.i(LOG_TAG, "finding " + mal_num);
         ArrayList<HashMap<String, String>> animeList = udb.getUserChart();
         //Log.i(LOG_TAG, "size of animeList: " + animeList.size());
-        for (HashMap<String,String> x : animeList){
-           for (Map.Entry entry : x.entrySet()){
-               String key = entry.getKey() + "";
-               String val = entry.getValue() + "";
-               //Log.i(LOG_TAG,"key: " + key + "val: " + val);
-               if(key.equals("malNum") && Integer.parseInt(val) == mal_num ) {
-                   //Log.i(LOG_TAG, "malnum is: " + entry.getValue() + "mal_num is: " + mal_num);
-                   return true;
-               }
-           }
+        for (HashMap<String, String> x : animeList) {
+            for (Map.Entry entry : x.entrySet()) {
+                String key = entry.getKey() + "";
+                String val = entry.getValue() + "";
+                //Log.i(LOG_TAG,"key: " + key + "val: " + val);
+                if (key.equals("malNum") && Integer.parseInt(val) == mal_num) {
+                    //Log.i(LOG_TAG, "malnum is: " + entry.getValue() + "mal_num is: " + mal_num);
+                    return true;
+                }
+            }
         }
         return false;
     }
@@ -328,6 +326,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             }
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -341,7 +340,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
                     // contacts-related task you need to do.
 
                 } else {
-                    Toast.makeText(this, "Please allow the app to access your calender.",
+                    Toast.makeText(this, "Please allow the app to access your calendar.",
                             Toast.LENGTH_LONG).show();
 
                     // permission denied, boo! Disable the
