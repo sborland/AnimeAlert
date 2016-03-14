@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.finalapp.teamhls.animealert.classes.AnimeDB;
 import com.finalapp.teamhls.animealert.classes.AnimeListView;
@@ -17,18 +16,10 @@ import com.finalapp.teamhls.animealert.classes.DownloadCover;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import com.finalapp.teamhls.animealert.classes.AnimeChart;
-import com.finalapp.teamhls.animealert.classes.AnimeDB;
 import com.finalapp.teamhls.animealert.classes.UserChart;
 import com.finalapp.teamhls.animealert.classes.UserDB;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CurrentChartActivity extends AppCompatActivity implements View.OnClickListener{
     public static String LOG_TAG = "My Log Tag";
@@ -45,16 +36,7 @@ public class CurrentChartActivity extends AppCompatActivity implements View.OnCl
         Button testyButton = (Button) findViewById(R.id.TestButton);
         testyButton.setOnClickListener(this);
         createListView();
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent viewAnime = new Intent(CurrentChartActivity.this, ViewAnimeActivity.class);
-                Log.i(LOG_TAG, "ID: " + view.getId());
-                String ID = Integer.toString(view.getId());
-                viewAnime.putExtra("malNum",ID);
-                CurrentChartActivity.this.startActivity(viewAnime);
-            }
-        });
+
 
 
     }
@@ -64,7 +46,6 @@ public void createListView(){
     AnimeDB currentDB = new AnimeDB(this);
     ArrayList<HashMap<String, String>> animelist = currentDB.getAnimeChart();
     int size = animelist.size();
-    size=5;
     String[] imgurlArr = new String[size];
     String[] summaryArr = new String[size];
     String[] titleArr = new String[size];
@@ -73,12 +54,16 @@ public void createListView(){
     for (HashMap<String,String> x : animelist) {
         String s = x.get("malNum");
 
-        if (n < 5) {
+
             Log.i(LOG_TAG, "title " + s);
 
             //for (Map.Entry entry : x.entrySet()) {
             //   Log.i(LOG_TAG,entry.getKey() +" "+ entry.getValue());
-            String[] animeData = DownloadCover.getCover(Integer.parseInt(s));
+            String[] animeData = {x.get("img"),x.get("sum")};
+            if (x.get("img")==null) {
+                Log.i(LOG_TAG, "Grabbing data for "+s);
+                animeData = DownloadCover.getCover(Integer.parseInt(s));
+            }
             String summary = animeData[1];
             String imgurl = animeData[0];
             String title = currentDB.getAnimeByMalNum(Integer.parseInt(s)).title;
@@ -88,13 +73,31 @@ public void createListView(){
             titleArr[n] = title;
             malIDArr[n]=s;
             n++;
-        }
+        
     }
     adapter = new AnimeListView(CurrentChartActivity.this,titleArr,summaryArr,imgurlArr,malIDArr );
     list.setAdapter(adapter);
 
+    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent viewAnime = new Intent(CurrentChartActivity.this, ViewAnimeActivity.class);
+            Log.i(LOG_TAG, "ID: " + view.getId());
+            String ID = Integer.toString(view.getId());
+            viewAnime.putExtra("malNum", ID);
+            CurrentChartActivity.this.startActivity(viewAnime);
+        }
+    });
+    Log.i(LOG_TAG, "SIZE THIS: "+ size);
+
 
 }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        createListView();
+    }
 
 
     @Override

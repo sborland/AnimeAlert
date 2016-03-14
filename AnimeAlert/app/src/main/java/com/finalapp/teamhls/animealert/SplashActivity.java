@@ -50,7 +50,6 @@ public class SplashActivity extends Activity {
     Retrofit retrofit;
     UserDB userChart;
     AnimeDB currentChart;
-    List<AnimeChart> CList = new ArrayList<AnimeChart>();
     List<AnimeShow> BList = new ArrayList<AnimeShow>();
     boolean updateDB = false;
 
@@ -84,7 +83,7 @@ public class SplashActivity extends Activity {
                 Log.i(LOG_TAG, "CREATED DATABASE");
             } else {
                 Log.i(LOG_TAG, "FOUND DATABASE");
-                //updateDB = true;
+                updateDB = true;
                 currentChart = new AnimeDB(this);
             }
             Log.i(LOG_TAG, "TEST: " + currentChart.getAnimeByMalNum(31414).title);
@@ -93,7 +92,7 @@ public class SplashActivity extends Activity {
 
             GetBasicChart(retrofit);
             GetRawChart(retrofit);
-            // LoadEverything();
+           // LoadEverything();
         }
 
 
@@ -168,7 +167,7 @@ public class SplashActivity extends Activity {
                                 anime.setImg(imgsum[0]);
                                 //Log.i(LOG_TAG, "PRINT THIS: " + imgsum[0]);
                                 anime.setSum(imgsum[1]);
-                                //boolean test =!(currentChart.getAnimeByMalNum(anime.malNum).airDate==null);
+                                boolean test =!(currentChart.getAnimeByMalNum(anime.malNum).airDate==null);
                                 //Log.i(LOG_TAG,"Is it in database already?:" + test);
                                 if (updateDB && !(currentChart.getAnimeByMalNum(anime.malNum)==null)) {
                                     currentChart.update(anime);
@@ -176,7 +175,7 @@ public class SplashActivity extends Activity {
                                     currentChart.insert(anime);
                                 }
 
-                                Log.i(LOG_TAG, "Got: " + ShowName + " MAL: " + z.getMALID());
+                                Log.i(LOG_TAG, test+ " Got: " + ShowName + " MAL: " + z.getMALID());
 
                             }
                         }
