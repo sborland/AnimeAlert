@@ -12,9 +12,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.finalapp.teamhls.animealert.classes.AnimeDB;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener{
     public static String LOG_TAG = "My Log Tag";
     private static final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR=1;
+    File currentDB;
+    AnimeDB currentChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +34,24 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         userButton.setOnClickListener(this);
         Button currentButton = (Button) findViewById(R.id.CurrentChartButton);
         currentButton.setOnClickListener(this);
+        currentDB = getApplicationContext().getDatabasePath("currentChart.db");
+        currentChart = new AnimeDB(this);
+        ArrayList<HashMap<String, String>> animelist = currentChart.getAnimeChart();
+        Log.i(LOG_TAG, "Size" + animelist.size());
+        if (animelist.size()==0){
+            this.deleteDatabase("currentChart.db");
+            restartThis();
+        }
+        requestPermission();
+    }
+
+    private void restartApp() {
+        Intent intent = new Intent(MenuActivity.this, SplashActivity.class);
+        startActivity(intent);
+    }
+    public void restartThis(){
+        restartApp();
+        finish();
     }
 
    private void requestPermission() {

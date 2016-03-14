@@ -76,8 +76,8 @@ public class SplashActivity extends Activity {
             userDB =getApplicationContext().getDatabasePath("userChart.db");
             currentDB = getApplicationContext().getDatabasePath("currentChart.db");
             userChart = new UserDB(this);
-            Log.i(LOG_TAG, currentDB.getAbsolutePath());
-            Log.i(LOG_TAG, (currentDB.exists()) + "");
+            //Log.i(LOG_TAG, currentDB.getAbsolutePath());
+            //Log.i(LOG_TAG, (currentDB.exists()) + "");
             if (!currentDB.exists()) {
                 currentChart = new AnimeDB(this);
                 Log.i(LOG_TAG, "CREATED DATABASE");
@@ -98,16 +98,10 @@ public class SplashActivity extends Activity {
 
     }
 
-    // This is the callback for when your async task has finished
-  //  @Override
-  //  public void onTaskFinished() {
-   //     completeSplash();
-  //  }
 
     public void completeSplash(){
-
         startApp();
-        finish(); // Don't forget to finish this Splash Activity so the user can't return to it!
+        finish();
     }
 
     public void LoadEverything(){
@@ -120,14 +114,6 @@ public class SplashActivity extends Activity {
                 Log.i(LOG_TAG,entry.getKey() +" "+ entry.getValue());
             }
         }
-
-
-    }
-
-    public void LoadImages() {
-
-        Log.i(LOG_TAG,"FINISHED");
-
 
 
     }
@@ -180,7 +166,7 @@ public class SplashActivity extends Activity {
                             }
                         }
                     }
-                    LoadImages();
+                    Log.i(LOG_TAG, "FINISHED");
                     completeSplash();
 
                 }

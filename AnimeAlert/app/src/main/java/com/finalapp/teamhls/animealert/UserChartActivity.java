@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.finalapp.teamhls.animealert.classes.AnimeListView;
 import com.finalapp.teamhls.animealert.classes.DownloadCover;
@@ -19,12 +20,14 @@ public class UserChartActivity extends AppCompatActivity implements View.OnClick
     public static String LOG_TAG = "My Log Tag";
     ListView chartList;
     AnimeListView adapter;
+    TextView checkthis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_chart);
         chartList = (ListView) findViewById(R.id.UserChartList);
+        checkthis = (TextView) findViewById(R.id.txtCheck);
         Log.i(LOG_TAG, "In UserCharts");
         createListView();
 
@@ -39,6 +42,11 @@ public class UserChartActivity extends AppCompatActivity implements View.OnClick
         UserDB userDB = new UserDB(this);
         ArrayList<HashMap<String, String>> animelist = userDB.getUserChart();
         int size = animelist.size();
+        if (size==0){
+            checkthis.setVisibility(View.VISIBLE);
+        }else{
+            checkthis.setVisibility(View.GONE);
+        }
         String[] imgurlArr = new String[size];
         String[] summaryArr = new String[size];
         String[] titleArr = new String[size];

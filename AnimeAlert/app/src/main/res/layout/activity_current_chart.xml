@@ -43,15 +43,4 @@
         android:nestedScrollingEnabled="false"
         android:gravity="center_horizontal" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TestViewAnime"
-        android:id="@+id/TestButton"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/OptButton"
-        android:layout_toStartOf="@+id/OptButton"
-        android:longClickable="false"
-        android:tag="testanime"/>
-
 </RelativeLayout>

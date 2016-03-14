@@ -44,4 +44,17 @@
         android:layout_alignParentStart="true"
         android:linksClickable="false" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="You currently do not have any Anime Alerts!"
+        android:id="@+id/txtCheck"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffff"
+        android:gravity="center_horizontal"
+        android:textSize="30dp"
+        android:textStyle="normal" />
+
 </RelativeLayout>

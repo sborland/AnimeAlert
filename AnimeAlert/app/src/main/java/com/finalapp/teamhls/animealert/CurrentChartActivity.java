@@ -33,11 +33,7 @@ public class CurrentChartActivity extends AppCompatActivity implements View.OnCl
         list = (ListView) findViewById(R.id.CurrentChartList);
         Button optButton = (Button) findViewById(R.id.OptButton);
         optButton.setOnClickListener(this);
-        Button testyButton = (Button) findViewById(R.id.TestButton);
-        testyButton.setOnClickListener(this);
         createListView();
-
-
 
     }
 
@@ -110,30 +106,5 @@ public void createListView(){
         //Test button that showes the Norn9 MAL site in the ViewAnimeActivity
         //the malNum is the URL code for Norn9
 
-        //Test button that showes the Norn9 MAL site in the ViewAnimeActivity
-        //the malNum is the URL code for Norn9
-        if (vStr.equalsIgnoreCase("testanime")) {
-           Intent testAnime = new Intent(CurrentChartActivity.this, ViewAnimeActivity.class);
-            UserDB udb = new UserDB(this);
-            AnimeDB adb = new AnimeDB(this);
-            UserChart x = new UserChart();
-            AnimeChart y = adb.getAnimeByMalNum(31414);
-            x.setUserTime(y.airDate);
-            x.setCurrEp(y.currEp);
-            x.setIsShort(y.isShort);
-            x.setSimulCast(y.simulCast);
-            x.setMalNum(y.malNum);
-            x.setAirDate(y.airDate);
-            x.setTitle(y.title);
-            Log.i(LOG_TAG, "Added title: " + y.title);
-            udb.insert(x);
-
-
-           // Log.i(LOG_TAG, "userList size: " + userList.size());
-            //UserChart z = udb.getAnimeByMalNum(31414);
-            //Log.i(LOG_TAG, "z: " + z.title);
-            testAnime.putExtra("malNum","31414");
-            CurrentChartActivity.this.startActivity(testAnime);
-        }
     }
 }
