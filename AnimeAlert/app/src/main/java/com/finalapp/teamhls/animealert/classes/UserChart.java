@@ -14,6 +14,8 @@ public class UserChart {
     public static final String KEY_isShort = "isShort";
     public static final String KEY_currEp = "currEp";
     public static final String KEY_userTime = "userTime";
+    public static final String KEY_sum = "sum";
+    public static final String KEY_img = "img";
 
 
     // property help us to keep data
@@ -24,6 +26,8 @@ public class UserChart {
     public String isShort;
     public int currEp;
     public Long userTime;
+    public String sum;
+    public String img;
 
     public void setMalNum(int malNum) {
         this.malNum = malNum;
@@ -46,6 +50,8 @@ public class UserChart {
     public void setUserTime(Long userTime) {
         this.userTime = userTime;
     }
+    public void setSum(String sum) {this.sum = sum;}
+    public void setImg(String sum) {this.img = img;}
 
 
 

@@ -46,6 +46,8 @@ public class UserDB {
         values.put(UserChart.KEY_isShort, chart.isShort);
         values.put(UserChart.KEY_userTime, chart.userTime);
         values.put(UserChart.KEY_currEp, chart.currEp);
+        values.put(UserChart.KEY_sum, chart.sum);
+        values.put(UserChart.KEY_img, chart.img);
 
 
         // Inserting Row
@@ -73,6 +75,9 @@ public class UserDB {
         values.put(UserChart.KEY_isShort, chart.isShort);
         values.put(UserChart.KEY_userTime, chart.userTime);
         values.put(UserChart.KEY_currEp, chart.currEp);
+        values.put(UserChart.KEY_sum, chart.sum);
+        values.put(UserChart.KEY_img, chart.img);
+
 
 
         // It's a good practice to use parameter ?, instead of concatenate string
@@ -90,7 +95,9 @@ public class UserDB {
                 UserChart.KEY_simulCast + "," +
                 UserChart.KEY_isShort + "," +
                 UserChart.KEY_userTime + "," +
-                UserChart.KEY_currEp +
+                UserChart.KEY_currEp + ","+
+                UserChart.KEY_sum + ","+
+                UserChart.KEY_img+
                 " FROM " + UserChart.TABLE;
         ArrayList<HashMap<String, String>> userList = new ArrayList<HashMap<String, String>>();
 
@@ -107,6 +114,8 @@ public class UserDB {
                 anime.put("userTime", cursor.getString(cursor.getColumnIndex(UserChart.KEY_userTime)));
                 anime.put("isShort", cursor.getString(cursor.getColumnIndex(UserChart.KEY_isShort)));
                 anime.put("currEp", cursor.getString(cursor.getColumnIndex(UserChart.KEY_currEp)));
+                anime.put("sum", cursor.getString(cursor.getColumnIndex(UserChart.KEY_sum)));
+                anime.put("img", cursor.getString(cursor.getColumnIndex(UserChart.KEY_img)));
                 userList.add(anime);
 
             } while (cursor.moveToNext());
@@ -129,7 +138,9 @@ public class UserDB {
                 UserChart.KEY_simulCast + "," +
                 UserChart.KEY_isShort + "," +
                 UserChart.KEY_currEp + "," +
-                UserChart.KEY_userTime +
+                UserChart.KEY_userTime + ","+
+                UserChart.KEY_sum + ","+
+                UserChart.KEY_img+
                 " FROM " + UserChart.TABLE
                 + " WHERE " +
                 UserChart.KEY_malNum + "=?";// It's a good practice to use parameter ?, instead of concatenate string
@@ -148,6 +159,8 @@ public class UserDB {
                 chart.isShort  =cursor.getString(cursor.getColumnIndex(UserChart.KEY_isShort));
                 chart.currEp =cursor.getInt(cursor.getColumnIndex(UserChart.KEY_currEp));
                 chart.userTime =cursor.getLong(cursor.getColumnIndex(UserChart.KEY_userTime));
+                chart.sum=cursor.getString(cursor.getColumnIndex(UserChart.KEY_sum));
+                chart.img=cursor.getString(cursor.getColumnIndex(UserChart.KEY_img));
 
             } while (cursor.moveToNext());
         }

@@ -32,7 +32,9 @@ public class DBUser  extends SQLiteOpenHelper {
                 + UserChart.KEY_simulCast + " TEXT, "
                 + UserChart.KEY_isShort + " TEXT, "
                 + UserChart.KEY_currEp + " INTEGER, "
-                + UserChart.KEY_userTime + " INTEGER )";
+                + UserChart.KEY_userTime + " INTEGER,"
+                + AnimeChart.KEY_sum +"TEXT,"
+                + AnimeChart.KEY_img+"TEXT)";
 
         db.execSQL(CREATE_TABLE_USERCHART);
 
