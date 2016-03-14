@@ -64,18 +64,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.i(LOG_TAG, "TEST: " + currentChart.getAnimeByMalNum(31414).title);
 
         //creates the retrofit and acesses it using the url
-        /*String url = "http://www.senpai.moe/";
+        String url = "http://www.senpai.moe/";
         CreateRetrofit retro = new CreateRetrofit();
         Retrofit retrofit = retro.accessService(url);
         GetBasicChart(retrofit);
-        GetRawChart(retrofit);*/
-        ArrayList<HashMap<String, String>> animelist = currentChart.getAnimeChart();
-
+        GetRawChart(retrofit);
+        //ArrayList<HashMap<String, String>> animelist = currentChart.getAnimeChart();
+        /*
        for (HashMap<String,String> x : animelist){
            for (Map.Entry entry : x.entrySet()){
               Log.i(LOG_TAG,entry.getKey() +" "+ entry.getValue());
            }
-       }
+       }*/
+
         //Log.i(LOG_TAG, "size of database: " + animelist.size());
     }
 

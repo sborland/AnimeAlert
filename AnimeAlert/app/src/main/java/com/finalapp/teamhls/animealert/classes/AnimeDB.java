@@ -31,8 +31,6 @@ public class AnimeDB {
         values.put(AnimeChart.KEY_simulCast, chart.simulCast);
         values.put(AnimeChart.KEY_isShort, chart.isShort);
         values.put(AnimeChart.KEY_currEp, chart.currEp);
-        values.put(AnimeChart.KEY_sum, chart.sum);
-        values.put(AnimeChart.KEY_img, chart.img);
 
 
         // Inserting Row
@@ -59,8 +57,6 @@ public class AnimeDB {
         values.put(AnimeChart.KEY_simulCast, chart.simulCast);
         values.put(AnimeChart.KEY_isShort, chart.isShort);
         values.put(AnimeChart.KEY_currEp, chart.currEp);
-        values.put(AnimeChart.KEY_sum, chart.sum);
-        values.put(AnimeChart.KEY_img, chart.img);
 
 
         // It's a good practice to use parameter ?, instead of concatenate string
@@ -77,9 +73,7 @@ public class AnimeDB {
                 AnimeChart.KEY_airDate + "," +
                 AnimeChart.KEY_simulCast + "," +
                 AnimeChart.KEY_isShort + "," +
-                AnimeChart.KEY_currEp + ","+
-                AnimeChart.KEY_sum + ","+
-                AnimeChart.KEY_img+
+                AnimeChart.KEY_currEp +
                 " FROM " + AnimeChart.TABLE;
         ArrayList<HashMap<String, String>> animeList = new ArrayList<HashMap<String, String>>();
 
@@ -95,8 +89,6 @@ public class AnimeDB {
                 anime.put("simulCast", cursor.getString(cursor.getColumnIndex(AnimeChart.KEY_simulCast)));
                 anime.put("isShort", cursor.getString(cursor.getColumnIndex(AnimeChart.KEY_isShort)));
                 anime.put("currEp", cursor.getString(cursor.getColumnIndex(AnimeChart.KEY_currEp)));
-                anime.put("sum", cursor.getString(cursor.getColumnIndex(AnimeChart.KEY_sum)));
-                anime.put("img", cursor.getString(cursor.getColumnIndex(AnimeChart.KEY_img)));
                 animeList.add(anime);
 
             } while (cursor.moveToNext());
@@ -118,9 +110,7 @@ public class AnimeDB {
                 AnimeChart.KEY_airDate + "," +
                 AnimeChart.KEY_simulCast + "," +
                 AnimeChart.KEY_isShort + "," +
-                AnimeChart.KEY_currEp + ","+
-                AnimeChart.KEY_sum + ","+
-                AnimeChart.KEY_img +
+                AnimeChart.KEY_currEp +
                 " FROM " + AnimeChart.TABLE
                 + " WHERE " +
                 AnimeChart.KEY_malNum + "=?";// It's a good practice to use parameter ?, instead of concatenate string
@@ -138,8 +128,6 @@ public class AnimeDB {
                 chart.simulCast =cursor.getString(cursor.getColumnIndex(AnimeChart.KEY_simulCast));
                 chart.isShort  =cursor.getString(cursor.getColumnIndex(AnimeChart.KEY_isShort));
                 chart.currEp =cursor.getInt(cursor.getColumnIndex(AnimeChart.KEY_currEp));
-                chart.sum =cursor.getString(cursor.getColumnIndex(AnimeChart.KEY_sum));
-                chart.img = cursor.getString(cursor.getColumnIndex(AnimeChart.KEY_img));
 
             } while (cursor.moveToNext());
         }

@@ -13,8 +13,6 @@ public class AnimeChart {
         public static final String KEY_simulCast = "simulCast";
         public static final String KEY_isShort = "isShort";
         public static final String KEY_currEp = "currEp";
-        public static final String KEY_sum = "sum";
-        public static final String KEY_img = "img";
 
         // property help us to keep data
         public int malNum;
@@ -23,8 +21,6 @@ public class AnimeChart {
         public String simulCast;
         public String isShort;
         public int currEp;
-        public String sum;
-        public String img;
 
         public void setMalNum(int malNum) {
                 this.malNum = malNum;
@@ -44,9 +40,6 @@ public class AnimeChart {
         public void setCurrEp(int currEp) {
                 this.currEp = currEp;
         }
-        public void setSum(String sum) {this.sum = sum;}
-        public void setImg(String img) {this.img = img;}
-
 
 
 
