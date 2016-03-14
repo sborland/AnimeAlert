@@ -68,6 +68,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
         String malNum = b.getString("malNum");
         mal_num = Integer.parseInt(malNum);
         String url = "http://myanimelist.net/anime/" + malNum;
+        Log.i(LOG_TAG,url);
 
         notify_check_box = (CheckBox) findViewById(R.id.checkBox);
         LoadingImg = (ImageView) findViewById(R.id.loadingImg);
@@ -81,19 +82,16 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
         webView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                // TODO show you progress image
                 LoadingImg.setVisibility(view.VISIBLE);
                 super.onPageStarted(view, url, favicon);
             }
             @Override
             public void onPageFinished(WebView view, String url) {
-                // TODO hide your progress image
                 LoadingImg.setVisibility(View.GONE);
                 super.onPageFinished(view, url);
             }
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
                 view.loadUrl(url);
                 return true;
             }

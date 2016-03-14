@@ -25,6 +25,7 @@ import com.finalapp.teamhls.animealert.classes.DownloadCover;
 import com.finalapp.teamhls.animealert.response.AnimeRaw;
 import com.finalapp.teamhls.animealert.response.AnimeShow;
 import com.finalapp.teamhls.animealert.response.Item;
+import com.finalapp.teamhls.animealert.classes.UserDB;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,12 +44,11 @@ import retrofit2.http.GET;
 
 public class SplashActivity extends Activity {
     public static String LOG_TAG = "My Log Tag";
-    private String userDB;
     File currentDB;
+    File userDB;
     TextView loading;
-    ProgressBar progressBar;
     Retrofit retrofit;
-
+    UserDB userChart;
     AnimeDB currentChart;
     List<AnimeChart> CList = new ArrayList<AnimeChart>();
     List<AnimeShow> BList = new ArrayList<AnimeShow>();
@@ -74,8 +74,9 @@ public class SplashActivity extends Activity {
             // Start your loading
             // LoadingTask task = new LoadingTask(progressBar,this,getApplicationContext());
             //task.execute("http://www.senpai.moe/"); // Pass in whatever you need a url is just an example we don't use it in this tutorial
-
+            userDB =getApplicationContext().getDatabasePath("userChart.db");
             currentDB = getApplicationContext().getDatabasePath("currentChart.db");
+            userChart = new UserDB(this);
             Log.i(LOG_TAG, currentDB.getAbsolutePath());
             Log.i(LOG_TAG, (currentDB.exists()) + "");
             if (!currentDB.exists()) {

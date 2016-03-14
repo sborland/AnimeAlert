@@ -51,7 +51,7 @@ public class UserChart {
         this.userTime = userTime;
     }
     public void setSum(String sum) {this.sum = sum;}
-    public void setImg(String sum) {this.img = img;}
+    public void setImg(String img) {this.img = img;}
 
 
 
