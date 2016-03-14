@@ -7,17 +7,22 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.finalapp.teamhls.animealert.CurrentChartActivity">
+    tools:context="com.finalapp.teamhls.animealert.CurrentChartActivity"
+    android:background="#1d002c">
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:text="Return to Options"
         android:id="@+id/OptButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:tag="return"/>
+        android:tag="return"
+        android:focusable="false"
+        android:background="@drawable/button"
+        android:allowUndo="false"
+        android:textColor="#1d002c" />
 
     <ListView
         android:layout_width="match_parent"

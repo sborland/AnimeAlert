@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.finalapp.teamhls.animealert.ViewAnimeActivity">
+    tools:context="com.finalapp.teamhls.animealert.ViewAnimeActivity"
+    android:background="#1d002c">
 
     <WebView
         android:layout_width="match_parent"
@@ -20,18 +21,20 @@
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:text="Return to Chart"
         android:id="@+id/ReturnButton"
         android:tag="return"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button"
+        android:textColor="#1d002c" />
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Notify me "
+        android:text="Set Anime Alert at "
         android:id="@+id/checkBox"
         android:textColor="#000000"
         android:onClick="onCheck"

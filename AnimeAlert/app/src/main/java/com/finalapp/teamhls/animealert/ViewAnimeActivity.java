@@ -9,6 +9,7 @@ package com.finalapp.teamhls.animealert;
         import android.net.Uri;
         import android.provider.CalendarContract;
         import android.support.v4.app.ActivityCompat;
+        import android.support.v4.content.ContextCompat;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.util.Log;
@@ -55,11 +56,13 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
     int time_selection = 0;
     int selection = 0;
     UserChart current;
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_anime);
+
 
 
         Log.i(LOG_TAG, "In ViewAnime");
@@ -212,7 +215,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
 
             //permission check for writing to calendar
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
+               requestPermission();
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
                 //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -246,7 +249,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             udb.insert(x);
 
             Log.i(LOG_TAG, "size of udb: " + udb.getUserChart().size());
-            Toast.makeText(this, "Added to your list!" ,
+            Toast.makeText(this, "Anime was added to your Anime Alert list! Check your calender!" ,
                     Toast.LENGTH_LONG).show();
 
             //Log.i(LOG_TAG, "checked: need to add to db");
@@ -259,7 +262,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             DeleteCalendarEntry(userTime);
             udb.delete(mal_num);
             Log.i(LOG_TAG, "deleted" + mal_num + "from udb");
-            Toast.makeText(this, "Deleted from your list!" ,
+            Toast.makeText(this, "Anime was removed for your Anime Alert list!" ,
                     Toast.LENGTH_LONG).show();
             //Log.i(LOG_TAG, "unchecked: need to remove from db");
         }
@@ -295,6 +298,61 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
         Log.i(LOG_TAG, "Deleted " + iNumRowsDeleted + " calendar entry.");
 
         return iNumRowsDeleted;
+    }
+
+    private void requestPermission() {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_CALENDAR)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_CALENDAR},
+                        MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_WRITE_CALENDAR: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+                    Toast.makeText(this, "Please allow the app to access your calender.",
+                            Toast.LENGTH_LONG).show();
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     @Override

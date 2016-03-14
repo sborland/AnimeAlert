@@ -208,8 +208,9 @@ public class SplashActivity extends Activity {
                     //check if the result is 'error' or 'ok'
                     Log.i(LOG_TAG, "SERVER GOOD BASICDATA. Result: " + response.body());
                     //Gets the current date and the dates for next two months
-                    Long CurrentDate = System.currentTimeMillis() / 1000;
-                    Long MonthDate = CurrentDate + (604800 * 8);
+                    Long CurrentDate = (System.currentTimeMillis() / 1000);
+
+                  //  Long MonthDate = CurrentDate + (604800 * 8);
 
                     //Grabs all airing anime between now and next two months
                     boolean isItInList;
@@ -217,7 +218,7 @@ public class SplashActivity extends Activity {
                     for (AnimeShow x : response.body()) {
                         String ShowName = x.getName().replace(" (Premiere)", "");
                         isItInList = false;
-                        if (x.getUtime() >= CurrentDate && MonthDate >= x.getUtime()) {
+                        if (x.getUtime() >= CurrentDate) {
                             for (AnimeShow y : BList) {
                                 if (y.getName().equals(ShowName)) {
                                     if (x.getCtr() > y.getCtr()) {
@@ -230,7 +231,8 @@ public class SplashActivity extends Activity {
                             if (!isItInList) {
                                 x.setName(ShowName);
                                 BList.add(x);
-                                // Log.i(LOG_TAG, "Add Show: " + x.getName() + "Episode:" + x.getCtr());
+                               //  Log.i(LOG_TAG, "Add Show: " + x.getName() + "Episode:" + x.getCtr());
+                               // Log.i(LOG_TAG, "TIME: " + CurrentDate);
 
                             }
 
