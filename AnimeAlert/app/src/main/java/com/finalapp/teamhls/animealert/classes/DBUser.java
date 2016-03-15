@@ -1,7 +1,7 @@
 package com.finalapp.teamhls.animealert.classes;
 
 /**
- * Created by HuiShi on 3/11/2016.
+ * DBuser builds the user's database for anime
  */
 
 import android.content.Context;

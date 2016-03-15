@@ -16,6 +16,13 @@ import com.finalapp.teamhls.animealert.classes.UserDB;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/*Class: CurrentChartActivity
+  Summary: Displays a list of the user's selected anime
+          (found in userChart.db) with their information
+           to the user. When the user selects an anime,
+           the app takes them to ViewAnimeActivity
+           with the MAL ID of the selected anime.
+        */
 public class UserChartActivity extends AppCompatActivity implements View.OnClickListener {
     public static String LOG_TAG = "My Log Tag";
     ListView chartList;
@@ -38,6 +45,7 @@ public class UserChartActivity extends AppCompatActivity implements View.OnClick
         createListView();
     }
 
+    //populates the list view with user's anime
     public void createListView(){
         UserDB userDB = new UserDB(this);
         ArrayList<HashMap<String, String>> animelist = userDB.getUserChart();
@@ -54,21 +62,15 @@ public class UserChartActivity extends AppCompatActivity implements View.OnClick
         int n = 0;
         for (HashMap<String,String> x : animelist) {
             String s = x.get("malNum");
-
-
-            Log.i(LOG_TAG, "title " + s);
-
-            //for (Map.Entry entry : x.entrySet()) {
-            //   Log.i(LOG_TAG,entry.getKey() +" "+ entry.getValue());
             String[] animeData = {x.get("img"),x.get("sum")};
             if (x.get("img")==null) {
-                Log.i(LOG_TAG, "Grabbing data for "+s);
+               // Log.i(LOG_TAG, "Grabbing data for "+s);
                 animeData = DownloadCover.getCover(Integer.parseInt(s));
             }
             String summary = animeData[1];
             String imgurl = animeData[0];
             String title = userDB.getAnimeByMalNum(Integer.parseInt(s)).title;
-            Log.i(LOG_TAG, "title " + title);
+           // Log.i(LOG_TAG, "title " + title);
             imgurlArr[n] = imgurl;
             summaryArr[n] = summary;
             titleArr[n] = title;
@@ -88,11 +90,7 @@ public class UserChartActivity extends AppCompatActivity implements View.OnClick
                 UserChartActivity.this.startActivity(viewAnime);
             }
         });
-
-
     }
-
-
 
 
 

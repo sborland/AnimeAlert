@@ -20,6 +20,7 @@ import com.finalapp.teamhls.animealert.R;
 import com.finalapp.teamhls.animealert.classes.DownloadCover;
 
 import java.io.InputStream;
+//AnimeListView creates the items that populate the listview in CurrentChart and UserChart Activity
 
 public class AnimeListView extends ArrayAdapter<String> {
     public static String LOG_TAG = "My Log Tag";
@@ -31,7 +32,7 @@ public class AnimeListView extends ArrayAdapter<String> {
     private final String[] imgurl;
     // private final Integer[] imageId;
     public AnimeListView(Activity context,
-                      String[] title, String[] summary, String[] imgurl, String[] malID){//,Integer[] imageId) {
+                      String[] title, String[] summary, String[] imgurl, String[] malID){
         super(context, R.layout.list_single, summary);
         this.context = context;
         this.title = title;

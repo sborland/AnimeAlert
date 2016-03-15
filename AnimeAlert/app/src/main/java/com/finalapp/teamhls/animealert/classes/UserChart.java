@@ -1,7 +1,7 @@
 package com.finalapp.teamhls.animealert.classes;
 
 /**
- * Created by HuiShi on 3/11/2016.
+ *  UserChart class to be inserted into userChart.db
  */
 public class UserChart {
     public static final String TABLE = "User";

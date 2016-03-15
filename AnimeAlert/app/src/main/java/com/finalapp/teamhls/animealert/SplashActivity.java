@@ -41,7 +41,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
-
+/*Class: SplashActivity
+  Summary: Display user options of either seeing
+           their list of anime alerts or the list
+           of current anime season. Selecting either
+           of them will take the user to the appropriate
+           UserChartActivity or CurrentChartActivity.
+           Also asks permission for calender access.
+*/
 public class SplashActivity extends Activity {
     public static String LOG_TAG = "My Log Tag";
     File currentDB;
@@ -52,8 +59,6 @@ public class SplashActivity extends Activity {
     AnimeDB currentChart;
     List<AnimeShow> BList = new ArrayList<AnimeShow>();
     boolean updateDB = false;
-
-
     boolean internet = false;
 
     @Override
@@ -70,14 +75,10 @@ public class SplashActivity extends Activity {
 
 
         }else {
-            // Start your loading
-            // LoadingTask task = new LoadingTask(progressBar,this,getApplicationContext());
-            //task.execute("http://www.senpai.moe/"); // Pass in whatever you need a url is just an example we don't use it in this tutorial
             userDB =getApplicationContext().getDatabasePath("userChart.db");
             currentDB = getApplicationContext().getDatabasePath("currentChart.db");
             userChart = new UserDB(this);
-            //Log.i(LOG_TAG, currentDB.getAbsolutePath());
-            //Log.i(LOG_TAG, (currentDB.exists()) + "");
+
             if (!currentDB.exists()) {
                 currentChart = new AnimeDB(this);
                 Log.i(LOG_TAG, "CREATED DATABASE");
@@ -104,22 +105,11 @@ public class SplashActivity extends Activity {
         finish();
     }
 
-    public void LoadEverything(){
-
-        ArrayList<HashMap<String, String>> animelist = currentChart.getAnimeChart();
-        Log.i(LOG_TAG, "Size" + animelist.size());
-
-        for (HashMap<String,String> x : animelist){
-            for (Map.Entry entry : x.entrySet()){
-                Log.i(LOG_TAG,entry.getKey() +" "+ entry.getValue());
-            }
-        }
-
-
-    }
-    public void GetRawChart(final Retrofit retrofit){
+    // Get the raw anime data from senpai moe and then insert it into the database along with
+    //previously gotten basic data
+    public void GetRawChart(final Retrofit retrofit) {
         AnimeRawService service = retrofit.create(AnimeRawService.class);
-        Call<AnimeRaw> AnimeSearch= service.getAnimeRawData();
+        Call<AnimeRaw> AnimeSearch = service.getAnimeRawData();
 
         AnimeSearch.enqueue(new Callback<AnimeRaw>() {
             @Override
@@ -153,15 +143,15 @@ public class SplashActivity extends Activity {
                                 anime.setImg(imgsum[0]);
                                 //Log.i(LOG_TAG, "PRINT THIS: " + imgsum[0]);
                                 anime.setSum(imgsum[1]);
-                                boolean test =!(currentChart.getAnimeByMalNum(anime.malNum).airDate==null);
+                                boolean test = !(currentChart.getAnimeByMalNum(anime.malNum).airDate == null);
                                 //Log.i(LOG_TAG,"Is it in database already?:" + test);
-                                if (updateDB && !(currentChart.getAnimeByMalNum(anime.malNum)==null)) {
+                                if (updateDB && !(currentChart.getAnimeByMalNum(anime.malNum) == null)) {
                                     currentChart.update(anime);
                                 } else {
                                     currentChart.insert(anime);
                                 }
 
-                                Log.i(LOG_TAG, test+ " Got: " + ShowName + " MAL: " + z.getMALID());
+                                Log.i(LOG_TAG, " Got: " + ShowName + " MAL: " + z.getMALID());
 
                             }
                         }
@@ -186,7 +176,7 @@ public class SplashActivity extends Activity {
 
 
 
-    ///call this method if you want to test getting the server info
+    ///gets basic chart data from senpai moe
     public void GetBasicChart(final Retrofit retrofit){
         AnimeBasicService service = retrofit.create(AnimeBasicService.class);
         final Call<List<AnimeShow>> AnimeSearch= service.getAnimeBasicData();
@@ -240,12 +230,6 @@ public class SplashActivity extends Activity {
 
                     }
 
-                        /* DEBUG
-                         String ts = CurrentDate.toString();
-                        for(AnimeShow y:myList){
-                            Log.i(LOG_TAG, "title: " + y.getName() +"episode: "+ y.getCtr()); }
-                        Log.i(LOG_TAG,ts+ " List size: "+myList.size());
-                        */
                 }
             }
 

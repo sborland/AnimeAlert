@@ -1,7 +1,7 @@
 package com.finalapp.teamhls.animealert.classes;
 
 /**
- * Created by HuiShi on 3/6/2016.
+ * DBhelper builds the currentChart database
  */
 
 import android.content.Context;

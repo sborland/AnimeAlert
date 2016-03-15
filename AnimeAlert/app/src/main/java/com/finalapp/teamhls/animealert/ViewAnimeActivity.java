@@ -1,6 +1,7 @@
 package com.finalapp.teamhls.animealert;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -41,6 +42,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+/*
+Class: ViewAnimeActivity
+Summary: Taking in a MAL ID from either CurrentChartActivity
+         or UserChartActivity, this activity displays the
+         anime's MyAnimeList webpage and allows the user
+         to insert an anime alert for that anime or remove it.
+*/
+
 public class ViewAnimeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     public static String LOG_TAG = "My Log Tag";
     private int mal_num = 0;
@@ -49,13 +58,11 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
     public LinkedHashMap<String, String> times = new LinkedHashMap<String, String>();
     UserDB udb = new UserDB(this);
     AnimeDB adb = new AnimeDB(this);
-    String title = "";
     CheckBox notify_check_box;
     Spinner sp;
     ImageView LoadingImg;
     int time_selection = 0;
     int selection = 0;
-    UserChart current;
     private static final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR = 1;
 
     @Override
@@ -71,7 +78,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
         String malNum = b.getString("malNum");
         mal_num = Integer.parseInt(malNum);
         String url = "http://myanimelist.net/anime/" + malNum;
-        Log.i(LOG_TAG, url);
+        Log.i(LOG_TAG, "Website address: "+ url);
 
         notify_check_box = (CheckBox) findViewById(R.id.checkBox);
         LoadingImg = (ImageView) findViewById(R.id.loadingImg);
@@ -79,19 +86,34 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
         Button retButton = (Button) findViewById(R.id.ReturnButton);
         retButton.setOnClickListener(this);
 
-        //loads up webview
+        //loads up webview to display the anime's MyAnimeList website
         WebView webView = (WebView) findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
+            ProgressDialog progressDialog;
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                LoadingImg.setVisibility(view.VISIBLE);
+               //LoadingImg.setVisibility(view.VISIBLE);
                 super.onPageStarted(view, url, favicon);
+                if (progressDialog == null) {
+                    progressDialog = new ProgressDialog(ViewAnimeActivity.this);
+                    progressDialog.setMessage("Loading MyAnimeList...");
+                    progressDialog.show();
+                }
             }
+
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                LoadingImg.setVisibility(View.GONE);
+                //LoadingImg.setVisibility(View.GONE);
+                try{
+                    if (progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                        progressDialog = null;
+                    }
+                }catch(Exception exception){
+                    exception.printStackTrace();
+                }
                 super.onPageFinished(view, url);
             }
 
@@ -106,6 +128,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
         setTimes();
     }
 
+// Putting values into the time spinner
     public void setTimes() {
         times.put("On airing", "0");
         times.put("5 Minutes before", "5");
@@ -132,6 +155,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, timeList);
         sp.setAdapter(myAdapter);
 
+    //Checks whether the anime was selected or not
         if (enableEventAdding()) {
             notify_check_box.setChecked(true);
             sp.setEnabled(false);
@@ -148,6 +172,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
         sp.setOnItemSelectedListener(this);
     }
 
+    //Time selector check
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         //if(!notify_check_box.isChecked())
         //    notify_check_box.setChecked(true);
@@ -215,12 +240,6 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             //permission check for writing to calendar
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
                 requestPermission();
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
             Uri eventUri = cr.insert(CalendarContract.Events.CONTENT_URI, event);
@@ -288,6 +307,7 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
         return false;
     }
 
+    //removes anime alert from the user's calender
     private int DeleteCalendarEntry(int entryID) {
         int iNumRowsDeleted = 0;
         Uri EVENTS_URI = Uri.parse("content://com.android.calendar/" + "events");
@@ -298,8 +318,9 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
         return iNumRowsDeleted;
     }
 
+    //requests permission from the user to access calender
     private void requestPermission() {
-        // Here, thisActivity is the current activity
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_CALENDAR)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -308,21 +329,12 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.WRITE_CALENDAR)) {
 
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
             } else {
-
-                // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_CALENDAR},
                         MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
         }
     }
@@ -335,22 +347,17 @@ public class ViewAnimeActivity extends AppCompatActivity implements View.OnClick
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
 
                 } else {
                     Toast.makeText(this, "Please allow the app to access your calendar.",
                             Toast.LENGTH_LONG).show();
-
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
                 return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 

@@ -65,6 +65,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignBottom="@+id/webView"
-        android:background="#000000" />
+        android:background="#000000"
+        android:visibility="gone" />
 
 </RelativeLayout>

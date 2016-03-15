@@ -6,7 +6,7 @@ import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
 
 /**
- * Created by sab on 3/4/2016.
+ * CreateRetrofit builds the retrofit for a specific url
  */
 public class CreateRetrofit {
 

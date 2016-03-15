@@ -1,7 +1,7 @@
 package com.finalapp.teamhls.animealert.classes;
 
 /**
- * Created by HuiShi on 3/11/2016.
+ *  UserDB allows us to perform actions on the userChart.db database
  */
 
 import android.content.ContentValues;

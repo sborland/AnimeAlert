@@ -1,7 +1,7 @@
 package com.finalapp.teamhls.animealert.classes;
 
 /**
- * Created by HuiShi on 3/6/2016.
+ * AnimeDB allows us to perform actions on the CurrentChart.db database
  */
 import android.content.ContentValues;
 import android.content.Context;

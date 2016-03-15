@@ -18,7 +18,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/*Class: MenuActivity
+  Summary: Display user options of either seeing
+           their list of anime alerts or the list
+           of current anime season. Selecting either
+           of them will take the user to the appropriate
+           UserChartActivity or CurrentChartActivity.
+           Also asks permission for calender access.
+*/
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener{
     public static String LOG_TAG = "My Log Tag";
     private static final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR=1;
@@ -37,7 +44,8 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         currentDB = getApplicationContext().getDatabasePath("currentChart.db");
         currentChart = new AnimeDB(this);
         ArrayList<HashMap<String, String>> animelist = currentChart.getAnimeChart();
-        Log.i(LOG_TAG, "Size" + animelist.size());
+        //checks if we actually got the database or not
+        //Log.i(LOG_TAG, "Size" + animelist.size());
         if (animelist.size()==0){
             this.deleteDatabase("currentChart.db");
             restartThis();
@@ -55,30 +63,18 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     }
 
    private void requestPermission() {
-       // Here, thisActivity is the current activity
+
        if (ContextCompat.checkSelfPermission(this,
                Manifest.permission.WRITE_CALENDAR)
                != PackageManager.PERMISSION_GRANTED) {
 
-           // Should we show an explanation?
            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                    Manifest.permission.WRITE_CALENDAR)) {
 
-               // Show an expanation to the user *asynchronously* -- don't block
-               // this thread waiting for the user's response! After the user
-               // sees the explanation, try again to request the permission.
-
            } else {
-
-               // No explanation needed, we can request the permission.
-
                ActivityCompat.requestPermissions(this,
                        new String[]{Manifest.permission.WRITE_CALENDAR},
                        MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
-
-               // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-               // app-defined int constant. The callback method gets the
-               // result of the request.
            }
        }
    }
@@ -91,21 +87,12 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
                 } else {
                     Toast.makeText(this, "Please allow the app to access your calender.",
                             Toast.LENGTH_LONG).show();
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                 }
                 return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 

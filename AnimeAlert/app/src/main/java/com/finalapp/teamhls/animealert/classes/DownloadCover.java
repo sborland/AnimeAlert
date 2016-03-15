@@ -14,7 +14,7 @@ import org.jsoup.select.Elements;
 
 
 /**
- * Created by Henry on 3/7/2016.
+ * DownloadCover Asynchronously uses Jsoup to grab info from each anime's anime list
  */
 public class DownloadCover {
     public static String LOG_TAG = "My Log Tag";

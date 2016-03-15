@@ -1,6 +1,6 @@
 package com.finalapp.teamhls.animealert.classes;
 /**
- * Created by HuiShi on 3/6/2016.
+ * AnimeChart class to be inserted into currentChart.db
  */
 public class AnimeChart {
         // Labels table name
@@ -46,12 +46,5 @@ public class AnimeChart {
         }
         public void setSum(String sum) {this.sum = sum;}
         public void setImg(String img) {this.img = img;}
-
-
-
-
-
-
-
 
 }
