@@ -7,7 +7,7 @@ AnimeAlert is an Android application that notifies you when an airing anime is b
 
 Browse a chart of current and upcoming anime and add them to your Anime Alert list!
 
-This will add the anime to your calendar, notifying you when that anime airs in Japan!
+This will add the anime to your Android calendar, notifying you when that anime airs in Japan!
 
 If you wish to stop receiving notifications about a certain anime, you can remove the entry from your Anime Alert list and it will automatically remove it from your calendar.
 
